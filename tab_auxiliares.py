@@ -23,6 +23,7 @@ class TabAuxiliares(ttk.Frame):
         self.caja = []
         self.idsCaja = {}
         self.caja_labelID = tk.StringVar(value="0")
+        self.seccion_caja_labelID = tk.StringVar(value="Prueba2")
 
         # Tipos de Caja en cajas
         self.id_tipo_caja_cajas_actual = 0
@@ -137,7 +138,7 @@ class TabAuxiliares(ttk.Frame):
         self.combo_tipo_caja_cajas.bind("<<ComboboxSelected>>", self.combo_tipo_caja_cajas_click)
 
         tk.Label(self.frm_cajas, text="Sección").grid(row=4, column=0, sticky="e", padx=10, pady=8)
-        self.labelID_seccion_cajas = tk.Label(self.frm_cajas, text= self.app.seccion.get(), font=("Segoe UI", 9, "italic"))
+        self.labelID_seccion_cajas = tk.Label(self.frm_cajas, text="0", textvariable=self.seccion_caja_labelID, font=("Segoe UI", 9, "italic"))
         self.labelID_seccion_cajas.grid(row=4, column=1, sticky="w", padx=10, pady=8)
 
         btn_frame = ttk.Frame(self.frm_cajas)
@@ -827,23 +828,19 @@ class TabAuxiliares(ttk.Frame):
         self.caja_labelID.set(str(self.id_caja_actual))
         self.entrada_cajas.delete(0, tk.END)
         self.entrada_cajas.insert(0, selected)
+        self.seccion_caja_labelID.set(self.app.seccion.get())
         if selected == '':
             self.combo_tipo_caja_cajas.set('')
             return  
         try:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
-            cadena = f"select t.TipoCaja, s.seccion from tiposCaja t, cajas c, secciones s where c.CajaID =  {self.id_caja_actual}"
-            cadena += " and t.TipoCajaID = c.TipoCajaID and c.SeccionID = s.SeccionID"
+            cadena = f"select t.TipoCaja from tiposCaja t, cajas c where c.CajaID =  {self.id_caja_actual}"
+            cadena += " and t.TipoCajaID = c.TipoCajaID"
             cursor.execute(cadena)
             row = cursor.fetchone()
             tipo_caja = row[0]
-            seccion_caja = row[1]
             self.combo_tipo_caja_cajas.set(tipo_caja)
-            self.combo_seccion_cajas.set(seccion_caja)
-            selected = self.combo_seccion_cajas.get()
-            self.id_seccion_cajas_actual = self.ids_seccion_cajas.get(selected, 0)
-            print(self.id_seccion_cajas_actual)
             conn.close()
         except Exception as e:
             messagebox.showerror("Error", f"No se pudo leer tipo caja:\n{e}")
@@ -916,16 +913,6 @@ class TabAuxiliares(ttk.Frame):
     def combo_seccion_bolsas_click(self, event):
         selected = self.combo_seccion_bolsas.get()
         self.id_seccion_bolsas_actual = self.ids_seccion_bolsas.get(selected, 0)
-# <<<<<<< Updated upstream
-#         print(f"ID: {self.id_seccion_bolsas_actual}")   
-# 
-#     def combo_seccion_cajas_click(self, event):
-#         selected = self.combo_seccion_cajas.get()
-#         self.id_seccion_cajas_actual = self.ids_seccion_cajas.get(selected, 0)
-#         print(f"ID: {self.id_seccion_cajas_actual}") 
-# =======
-#         # print(f"Sección para Bolsas seleccionada: {selected}, ID: {self.id_seccion_bolsas_actual}")   
-# >>>>>>> Stashed changes
 
     def contar_registros_asociados(self, valor_id, campo, tabla):
         try:

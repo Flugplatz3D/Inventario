@@ -190,7 +190,9 @@ class InventarioApp(tk.Tk):
         self.tab_detalle.llenarClasificacion()  # Actualiza las clasificaciones en la pestaña Detalle
 
         self.id_seccion_actual = self.ids_seccion.get(seccion, 0)  # Actualiza el ID de la sección actual
-        self.tab_aux.seccion_labelID.set(f"Sección ID: {self.id_seccion_actual}")  # Actualiza el label en la pestaña Auxiliares
+        # self.tab_aux.seccion_labelID.set(f"Sección ID: {self.id_seccion_actual}")  # Actualiza el label en la pestaña Auxiliares
+        # self.seccion.set("prueba")
+        self.tab_aux.seccion_caja_labelID.set(self.seccion.get())
 
         ventana_modal.destroy()
 

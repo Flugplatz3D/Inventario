@@ -528,7 +528,7 @@ class TabAuxiliares(ttk.Frame):
             cursor = conn.cursor()
             print(f"Guardar Bolsa: {valor_bolsa}, ID actual: {self.id_bolsa_actual}")
             if selected != '' and self.id_bolsa_actual != 0:
-                cadena = f"UPDATE Bolsas SET Bolsa = '{valor_bolsa}', TipoBolsaID = {self.id_tipo_bolsa_bolsas_actual}, SeccionID = {self.id_seccion_bolsas_actual} WHERE BolsaID = {self.id_bolsa_actual}"
+                cadena = f"UPDATE Bolsas SET Bolsa = '{valor_bolsa}', TipoBolsaID = {self.id_tipo_bolsa_bolsas_actual}, SeccionID = {self.app.id_seccion_actual} WHERE BolsaID = {self.id_bolsa_actual}"
             else:
                 cadena = f"INSERT INTO Bolsas (Bolsa, TipoBolsaID, SeccionID) VALUES ('{valor_bolsa}', {self.id_tipo_bolsa_bolsas_actual}, {self.app.id_seccion_actual})"
             cursor.execute(cadena)

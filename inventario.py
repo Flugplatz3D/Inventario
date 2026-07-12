@@ -1,6 +1,6 @@
 from logging import root
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from tab_detalle import TabDetalle
 from tab_auxiliares import TabAuxiliares
 import configparser
@@ -96,7 +96,7 @@ class InventarioApp(tk.Tk):
         y = (screen_height/2) - (height/2) - 60
         ventana_modal.geometry('%dx%d+%d+%d' % (width, height, x, y))
         ventana_modal.resizable(False, False)
-        label = tk.Label(ventana_modal, text="Inventario App Versión 1.1.4\n© 2026\n(Flugplatz3D)", font=("Arial", 11), justify="center")
+        label = tk.Label(ventana_modal, text="Inventario App Versión 1.1.5\n© 2026\n(Flugplatz3D)", font=("Arial", 11), justify="center")
         label.pack(pady=10)
         tk.Button(ventana_modal, text="Cerrar", command=ventana_modal.destroy, width=10).pack(pady=20)
         # Esto bloquea la ventana principal
@@ -209,14 +209,21 @@ class InventarioApp(tk.Tk):
             self.tab_detalle.llenarCajas()
             if valor:
                 self.tab_detalle.comboCajas.set(valor)
-            valor_bolsa = self.tab_detalle.comboBolsas.get()
+            valor = self.tab_detalle.comboBolsas.get()
             self.tab_detalle.llenarBolsas()
-            if valor_bolsa:
-                self.tab_detalle.comboBolsas.set(valor_bolsa)
-            valor_clasificacion = self.tab_detalle.comboClasificaciones.get()
+            if valor:
+                # messagebox.showinfo("bolsas", valor)
+                self.tab_detalle.comboBolsas.set(valor)
+            valor = self.tab_detalle.comboClasificaciones.get()
             self.tab_detalle.llenarClasificacion()
-            if valor_clasificacion:
-                self.tab_detalle.comboClasificaciones.set(valor_clasificacion)
+            if valor:
+                self.tab_detalle.comboClasificaciones.set(valor)
+
+            if len(self.tab_detalle.tree.get_children()) > 0:
+                self.tab_detalle.buscar()
+
+        # if self.notebook.select() == str(self.tab_aux):
+        #     print("En tab_aux")
     
 if __name__ == "__main__":
     app = InventarioApp()

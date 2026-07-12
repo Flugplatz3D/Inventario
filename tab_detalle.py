@@ -11,8 +11,8 @@ class TabDetalle(ttk.Frame):
         # print(f"Literal: {app.seccion.get()} | ID: {app.id_seccion_actual}") 
        
         # Variables
-        self.intOrden = tk.IntVar(value=6)
-        self.intSentido = tk.IntVar(value=2)
+        self.intOrden = tk.IntVar(value=1)
+        self.intSentido = tk.IntVar(value=1)
         self.id_caja_actual = 0
         self.id_bolsa_actual = 0
         self.id_clasificacion_actual = 0

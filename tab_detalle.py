@@ -8,7 +8,7 @@ class TabDetalle(ttk.Frame):
     def __init__(self, parent, app):
         super().__init__(parent)
         self.app = app
-        print(f"Literal: {app.seccion.get()} | ID: {app.id_seccion_actual}") 
+        # print(f"Literal: {app.seccion.get()} | ID: {app.id_seccion_actual}") 
        
         # Variables
         self.intOrden = tk.IntVar(value=6)
@@ -148,6 +148,9 @@ class TabDetalle(ttk.Frame):
         self.style.configure("Treeview.Heading", font=("Segoe UI", 9, "bold"))
 
     def buscar(self, *args):
+        
+        id_seccion = self.app.id_seccion_actual
+
         texto1 = self.entrada1.get().strip()
         texto2 = self.entrada2.get().strip()
         texto3 = self.entrada3.get().strip()
@@ -158,8 +161,10 @@ class TabDetalle(ttk.Frame):
         cadena += "where d.CajaID = c.CajaID "
         cadena += "and d.BolsaID = b.BolsaID "
         cadena += "and d.ClasificacionID = f.ClasificacionID "
+        cadena += f"and c.SeccionID = {id_seccion} and b.SeccionID = {id_seccion} and f.SeccionID = {id_seccion} "
         cadena += "and c.TipoCajaID = tc.TipoCajaID "
         cadena += "and b.TipoBolsaID = tb.TipoBolsaID "
+        print(cadena)
         if texto1:
             cadena += f" AND d.Descripcion LIKE '%{texto1}%'"
         if texto2:
@@ -249,7 +254,6 @@ class TabDetalle(ttk.Frame):
         try:
             id_seccion = self.app.id_seccion_actual
             conn = sqlite3.connect(DB_NAME)
-            
             cursor = conn.cursor()
             cadena = f"SELECT CajaID, Caja FROM cajas WHERE SeccionID = {id_seccion} ORDER BY upper(Caja)"
             cursor.execute(cadena)
@@ -286,9 +290,12 @@ class TabDetalle(ttk.Frame):
     
     def llenarClasificacion(self):
         try:
+            id_seccion = self.app.id_seccion_actual
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
-            cursor.execute("SELECT ClasificacionID, Clasificacion FROM Clasificaciones ORDER BY upper(Clasificacion)")
+            cadena = "SELECT ClasificacionID, Clasificacion FROM clasificaciones"
+            cadena +=f" WHERE SeccionID = {id_seccion} ORDER BY upper(Clasificacion)"
+            cursor.execute(cadena)
             rows = cursor.fetchall()
             conn.close()
 

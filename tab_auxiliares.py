@@ -10,7 +10,6 @@ class TabAuxiliares(ttk.Frame):
     def __init__(self, parent, app):
         super().__init__(parent)
         self.app = app
-        print(f"aux.. Literal: {app.seccion.get()} | ID: {app.id_seccion_actual}") 
 
         # Clasificaciones
         self.id_clasificacion_actual = 0
@@ -23,7 +22,6 @@ class TabAuxiliares(ttk.Frame):
         self.caja = []
         self.idsCaja = {}
         self.caja_labelID = tk.StringVar(value="0")
-        self.seccion_caja_labelID = tk.StringVar(value="Prueba2")
 
         # Tipos de Caja en cajas
         self.id_tipo_caja_cajas_actual = 0
@@ -35,6 +33,8 @@ class TabAuxiliares(ttk.Frame):
         self.bolsa = []
         self.idsbolsa = {}
         self.bolsa_labelID = tk.StringVar(value="0")
+
+        self.seccion_actual_labelID = tk.StringVar(value="")
 
         # Tipos de Bolsa en bolsas
         self.id_tipo_bolsa_bolsas_actual = 0
@@ -138,7 +138,7 @@ class TabAuxiliares(ttk.Frame):
         self.combo_tipo_caja_cajas.bind("<<ComboboxSelected>>", self.combo_tipo_caja_cajas_click)
 
         tk.Label(self.frm_cajas, text="Sección").grid(row=4, column=0, sticky="e", padx=10, pady=8)
-        self.labelID_seccion_cajas = tk.Label(self.frm_cajas, text="0", textvariable=self.seccion_caja_labelID, font=("Segoe UI", 9, "italic"))
+        self.labelID_seccion_cajas = tk.Label(self.frm_cajas, textvariable=self.seccion_actual_labelID, font=("Segoe UI", 9, "italic"))
         self.labelID_seccion_cajas.grid(row=4, column=1, sticky="w", padx=10, pady=8)
 
         btn_frame = ttk.Frame(self.frm_cajas)
@@ -160,7 +160,7 @@ class TabAuxiliares(ttk.Frame):
         self.entrada_bolsa.grid(row=0, column=1, sticky="ew", padx=10, pady=15)
 
         tk.Label(self.frm_bolsas, text="ID").grid(row=1, column=0, sticky="e", padx=10, pady=8)
-        self.labelID_bolsa = tk.Label(self.frm_bolsas, text="0", textvariable=self.bolsa_labelID, font=("Segoe UI", 9))
+        self.labelID_bolsa = tk.Label(self.frm_bolsas, textvariable=self.bolsa_labelID, font=("Segoe UI", 9))
         self.labelID_bolsa.grid(row=1, column=1, sticky="w", padx=10, pady=8)
 
         tk.Label(self.frm_bolsas, text="Bolsas").grid(row=2, column=0, sticky="e", padx=10, pady=8)
@@ -173,13 +173,8 @@ class TabAuxiliares(ttk.Frame):
         self.combo_tipo_bolsa_bolsas.grid(row=3, column=1, sticky="ew", padx=10, pady=8)
         self.combo_tipo_bolsa_bolsas.bind("<<ComboboxSelected>>", self.combo_tipo_bolsa_bolsas_click)
 
-        # tk.Label(self.frm_bolsas, text="Sección").grid(row=4, column=0, sticky="e", padx=10, pady=8)
-        # self.combo_seccion_bolsas = ttk.Combobox(self.frm_bolsas, state="readonly", width=32)
-        # self.combo_seccion_bolsas.grid(row=4, column=1, sticky="ew", padx=10, pady=8)
-        # self.combo_seccion_bolsas.bind("<<ComboboxSelected>>", self.combo_seccion_bolsas_click)
-
         tk.Label(self.frm_bolsas, text="Sección").grid(row=4, column=0, sticky="e", padx=10, pady=8)
-        self.labelID_seccion_cajas = tk.Label(self.frm_bolsas, text= self.app.seccion.get(), font=("Segoe UI", 9, "italic"))
+        self.labelID_seccion_cajas = tk.Label(self.frm_bolsas, textvariable=self.seccion_actual_labelID, font=("Segoe UI", 9, "italic"))
         self.labelID_seccion_cajas.grid(row=4, column=1, sticky="w", padx=10, pady=8)
 
         btn_frame = ttk.Frame(self.frm_bolsas)
@@ -207,8 +202,12 @@ class TabAuxiliares(ttk.Frame):
         self.comboClasificaciones.grid(row=2, column=1, sticky="ew", padx=10, pady=8)
         self.comboClasificaciones.bind("<<ComboboxSelected>>", self.combo_clasificaciones_click)
 
+        tk.Label(self.frm_datos, text="Sección").grid(row=3, column=0, sticky="e", padx=10, pady=8)
+        self.labelID_seccion_clasificacion = tk.Label(self.frm_datos, textvariable=self.seccion_actual_labelID, font=("Segoe UI", 9, "italic"))
+        self.labelID_seccion_clasificacion.grid(row=3, column=1, sticky="w", padx=10, pady=8)
+
         btn_frame = ttk.Frame(self.frm_datos)
-        btn_frame.grid(row=3, column=0, columnspan=2, pady=20)
+        btn_frame.grid(row=4, column=0, columnspan=2, pady=20)
         tk.Button(btn_frame, text="Nuevo", command=self.nuevo_clasificacion, width=10).pack(side="left", padx=5)
         tk.Button(btn_frame, text="Guardar", command=self.guardar_clasificacion, width=10).pack(side="left", padx=5)
         tk.Button(btn_frame, text="Eliminar", command=self.eliminar_clasificacion, width=10).pack(side="left", padx=5)
@@ -270,7 +269,7 @@ class TabAuxiliares(ttk.Frame):
         try:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
-            cursor.execute("SELECT ClasificacionID, Clasificacion FROM Clasificaciones ORDER BY upper(Clasificacion)")
+            cursor.execute(f"SELECT ClasificacionID, Clasificacion FROM Clasificaciones where SeccionID = {self.app.id_seccion_actual} ORDER BY upper(Clasificacion)")
             rows = cursor.fetchall()
             conn.close()
 
@@ -289,7 +288,8 @@ class TabAuxiliares(ttk.Frame):
         try:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
-            cursor.execute("SELECT CajaID, Caja FROM cajas ORDER BY upper(Caja)")
+            cadena = f"SELECT CajaID, Caja FROM cajas where SeccionID = {self.app.id_seccion_actual} ORDER BY upper(Caja)"  
+            cursor.execute(cadena)
             rows = cursor.fetchall()
             conn.close()
 
@@ -325,7 +325,8 @@ class TabAuxiliares(ttk.Frame):
         try:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
-            cursor.execute("SELECT BolsaID, Bolsa FROM bolsas ORDER BY upper(Bolsa)")
+            cadena = f"SELECT BolsaID, Bolsa FROM bolsas where SeccionID = {self.app.id_seccion_actual}  ORDER BY upper(Bolsa)"
+            cursor.execute(cadena)
             rows = cursor.fetchall()
             conn.close()
 
@@ -414,51 +415,8 @@ class TabAuxiliares(ttk.Frame):
         except Exception as e:
             print("Error cargando Secciones:", e)
 
-    def llenar_secciones_cajas(self):
-        try:
-            conn = sqlite3.connect(DB_NAME)
-            cursor = conn.cursor()
-            cursor.execute("SELECT SeccionID, Seccion FROM Secciones ORDER BY upper(Seccion)")
-            rows = cursor.fetchall()
-            conn.close()
-
-            self.secciones_cajas = [""]
-            self.ids_seccion_cajas = {"": 0}
-            for row in rows:
-                self.secciones_cajas.append(row[1])
-                self.ids_seccion_cajas[row[1]] = row[0]
-
-            self.combo_seccion_cajas['values'] = self.secciones_cajas
-            self.combo_seccion_cajas.set("")
-            # print(self.ids_seccion_cajas)
-            # print(self.secciones_cajas)
-        except Exception as e:
-            print("Error cargando Secciones para Cajas:", e)
-
-    def llenar_secciones_bolsas(self):
-        try:
-            conn = sqlite3.connect(DB_NAME)
-            cursor = conn.cursor()
-            cursor.execute("SELECT SeccionID, Seccion FROM Secciones ORDER BY upper(Seccion)")
-            rows = cursor.fetchall()
-            conn.close()
-
-            self.secciones_bolsas = [""]
-            self.ids_seccion_bolsas = {"": 0}
-            for row in rows:
-                self.secciones_bolsas.append(row[1])
-                self.ids_seccion_bolsas[row[1]] = row[0]
-
-            self.combo_seccion_bolsas['values'] = self.secciones_bolsas
-            self.combo_seccion_bolsas.set("")
-            # print(self.ids_seccion_bolsas)
-            # print(self.secciones_bolsas)
-
-        except Exception as e:
-            print("Error cargando Secciones para Bolsas:", e)
-
     def nuevo_clasificacion(self):
-        self.entrada_clasificacion.delete(0, tk.END) #self.entrada_clasificacion.insert(0, '')
+        self.entrada_clasificacion.delete(0, tk.END)
         self.clasificacion_labelID.set('0')
         self.comboClasificaciones.set('')
         self.entrada_clasificacion.focus_set()
@@ -469,7 +427,6 @@ class TabAuxiliares(ttk.Frame):
         self.combo_cajas.set('')
         self.entrada_cajas.insert(0, '')
         self.combo_tipo_caja_cajas.set('')
-        self.combo_seccion_cajas.set('')
         self.entrada_cajas.focus_set()
         
     def nuevo_bolsa(self):
@@ -478,7 +435,6 @@ class TabAuxiliares(ttk.Frame):
         self.combo_bolsas.set('')
         self.entrada_bolsa.insert(0, '')
         self.combo_tipo_bolsa_bolsas.set('')
-        self.combo_seccion_bolsas.set('')
         self.entrada_bolsa.focus_set()
 
     def nuevo_tipo_caja(self):
@@ -510,9 +466,9 @@ class TabAuxiliares(ttk.Frame):
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
             if selected != '' and self.id_clasificacion_actual != 0:
-                cadena = f"UPDATE Clasificaciones SET Clasificacion = '{valor}' WHERE ClasificacionID = {self.id_clasificacion_actual}"
+                cadena = f"UPDATE Clasificaciones SET Clasificacion = '{valor}', SeccionID = {self.app.id_seccion_actual} WHERE ClasificacionID = {self.id_clasificacion_actual}"
             else:
-                cadena = f"INSERT INTO Clasificaciones (Clasificacion) VALUES ('{valor}')"
+                cadena = f"INSERT INTO Clasificaciones (Clasificacion, SeccionID) VALUES ('{valor}', {self.app.id_seccion_actual})"
             cursor.execute(cadena)
             conn.commit()
             conn.close()
@@ -538,12 +494,10 @@ class TabAuxiliares(ttk.Frame):
         try:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
-            # print(f"Guardar Caja: {valor_caja}\nID actual: {self.id_caja_actual}\nTipo Caja: {valor_tipo_caja}\nID Tipo Caja: {self.id_tipo_caja_cajas_actual}\nSeccion: {self.id_seccion_cajas_actual}")
             if selected != '' and self.id_caja_actual != 0:
-                cadena = f"UPDATE Cajas SET Caja = '{valor_caja}', TipoCajaID = {self.id_tipo_caja_cajas_actual}, SeccionID = {self.id_seccion_cajas_actual} WHERE CajaID = {self.id_caja_actual}"
+                cadena = f"UPDATE Cajas SET Caja = '{valor_caja}', TipoCajaID = {self.id_tipo_caja_cajas_actual}, SeccionID = {self.app.id_seccion_actual} WHERE CajaID = {self.id_caja_actual}"
             else:
-                cadena = f"INSERT INTO Cajas (Caja, TipoCajaID, SeccionID) VALUES ('{valor_caja}', {self.id_tipo_caja_cajas_actual}, {self.id_seccion_cajas_actual})"
-            print(cadena)
+                cadena = f"INSERT INTO Cajas (Caja, TipoCajaID, SeccionID) VALUES ('{valor_caja}', {self.id_tipo_caja_cajas_actual}, {self.app.id_seccion_actual})"
             cursor.execute(cadena)
             conn.commit()
             conn.close()
@@ -557,7 +511,6 @@ class TabAuxiliares(ttk.Frame):
             messagebox.showerror("Error", f"No se pudo guardar:\n{e}")
 
     def guardar_bolsa(self):
-        # self.combo_tipo_bolsa_bolsas.config(state="disabled")
         selected = self.combo_bolsas.get()
         self.id_bolsa_actual = self.idsBolsa.get(selected, 0)
         valor_bolsa = self.entrada_bolsa.get().strip()
@@ -651,7 +604,7 @@ class TabAuxiliares(ttk.Frame):
         try:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
-            print(f"Guardar Sección: {valor}, ID actual: {self.id_seccion_actual}")
+            # print(f"Guardar Sección: {valor}, ID actual: {self.id_seccion_actual}")
             if selected != '' and self.id_seccion_actual != 0:
                 cadena = f"UPDATE Secciones SET Seccion = '{valor}' WHERE SeccionID = {self.id_seccion_actual}"
             else:
@@ -691,7 +644,6 @@ class TabAuxiliares(ttk.Frame):
             messagebox.showerror("Error", f"No se pudo eliminar:\n{e}")
 
     def eliminar_caja(self):
-        # messagebox.showinfo("Eliminar", "Función de eliminar Caja en desarrollo")
         selected = self.combo_cajas.get()
         self.id_caja_actual = self.idsCaja.get(selected, 0)
         if selected == '':
@@ -828,7 +780,6 @@ class TabAuxiliares(ttk.Frame):
         self.caja_labelID.set(str(self.id_caja_actual))
         self.entrada_cajas.delete(0, tk.END)
         self.entrada_cajas.insert(0, selected)
-        self.seccion_caja_labelID.set(self.app.seccion.get())
         if selected == '':
             self.combo_tipo_caja_cajas.set('')
             return  
@@ -857,18 +808,12 @@ class TabAuxiliares(ttk.Frame):
         try:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
-            # cadena = f"select TipoBolsa from tiposBolsa t, bolsas b where b.BolsaID = {self.id_bolsa_actual} and t.TipoBolsaID = b.TipoBolsaID"
-            cadena = f"select t.TipoBolsa, s.seccion from tiposBolsa t, bolsas c, secciones s where c.BolsaID =  {self.id_bolsa_actual}"
-            cadena += " and t.TipoBolsaID = c.TipoBolsaID and c.SeccionID = s.SeccionID"
+            cadena = f"select t.TipoBolsa from tiposBolsa t, bolsas c where c.BolsaID =  {self.id_bolsa_actual}"
+            cadena += " and t.TipoBolsaID = c.TipoBolsaID"
             cursor.execute(cadena)
             row = cursor.fetchone()
             tipo_bolsa = row[0]
-            seccion_bolsa = row[1]
             self.combo_tipo_bolsa_bolsas.set(tipo_bolsa)
-            self.combo_seccion_bolsas.set(seccion_bolsa)
-            selected = self.combo_seccion_bolsas.get()
-            self.id_seccion_bolsas_actual = self.ids_seccion_bolsas.get(selected, 0)
-            print(self.id_seccion_bolsas_actual)
             conn.close()
 
         except Exception as e:
@@ -902,24 +847,14 @@ class TabAuxiliares(ttk.Frame):
         self.entrada_seccion.delete(0, tk.END)
         self.entrada_seccion.insert(0, selected)
         self.seccion_labelID.set(str(self.id_seccion_actual))
-        print(f"Sección seleccionada: {selected}, ID: {self.id_seccion_actual}")
-
-    def combo_seccion_cajas_click(self, event):
-        selected = self.combo_seccion_cajas.get()
-        self.id_seccion_cajas_actual = self.ids_seccion_cajas.get(selected, 0)
-
-        # print(f"Sección para Cajas seleccionada: {selected}, ID: {self.id_seccion_cajas_actual}")
-
-    def combo_seccion_bolsas_click(self, event):
-        selected = self.combo_seccion_bolsas.get()
-        self.id_seccion_bolsas_actual = self.ids_seccion_bolsas.get(selected, 0)
+        
+        # print(f"Sección seleccionada: {selected}, ID: {self.id_seccion_actual}")
 
     def contar_registros_asociados(self, valor_id, campo, tabla):
         try:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
             cadena = f"SELECT count(*) FROM {tabla} WHERE {campo} = {valor_id}"
-            # print(f"Registros asociados:\n {cadena}")
             cursor.execute(cadena)
             total = cursor.fetchone()[0]
             conn.close()

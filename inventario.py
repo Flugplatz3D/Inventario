@@ -60,6 +60,8 @@ class InventarioApp(tk.Tk):
 
         self.title(f"Inventario ({self.seccion.get()})")
 
+        self.tab_aux.seccion_actual_labelID.set(self.seccion.get())
+
     def leer_id_seccion(self, seccion_inicial):
         if seccion_inicial:
             try:
@@ -94,7 +96,7 @@ class InventarioApp(tk.Tk):
         y = (screen_height/2) - (height/2) - 60
         ventana_modal.geometry('%dx%d+%d+%d' % (width, height, x, y))
         ventana_modal.resizable(False, False)
-        label = tk.Label(ventana_modal, text="Inventario App Versión 1.1.2\n© 2026\n(Flugplatz3D)", font=("Arial", 11), justify="center")
+        label = tk.Label(ventana_modal, text="Inventario App Versión 1.1.3\n© 2026\n(Flugplatz3D)", font=("Arial", 11), justify="center")
         label.pack(pady=10)
         tk.Button(ventana_modal, text="Cerrar", command=ventana_modal.destroy, width=10).pack(pady=20)
         # Esto bloquea la ventana principal
@@ -190,9 +192,14 @@ class InventarioApp(tk.Tk):
         self.tab_detalle.llenarClasificacion()  # Actualiza las clasificaciones en la pestaña Detalle
 
         self.id_seccion_actual = self.ids_seccion.get(seccion, 0)  # Actualiza el ID de la sección actual
-        # self.tab_aux.seccion_labelID.set(f"Sección ID: {self.id_seccion_actual}")  # Actualiza el label en la pestaña Auxiliares
-        # self.seccion.set("prueba")
-        self.tab_aux.seccion_caja_labelID.set(self.seccion.get())
+        self.tab_aux.llenar_cajas()
+        self.tab_aux.llenar_bolsas()
+        self.tab_aux.llenar_clasificacion()
+        self.tab_aux.nuevo_caja()
+        self.tab_aux.nuevo_bolsa()
+        self.tab_aux.nuevo_clasificacion()
+        self.tab_aux.nuevo_seccion()
+        self.tab_aux.seccion_actual_labelID.set(self.seccion.get())
 
         ventana_modal.destroy()
 

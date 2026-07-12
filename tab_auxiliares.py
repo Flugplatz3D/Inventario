@@ -400,7 +400,8 @@ class TabAuxiliares(ttk.Frame):
         try:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
-            cursor.execute("SELECT SeccionID, Seccion FROM Secciones ORDER BY upper(Seccion)")
+            cadena = f"SELECT SeccionID, Seccion FROM Secciones where SeccionID <> {self.app.id_seccion_actual} ORDER BY upper(Seccion)"
+            cursor.execute(cadena)
             rows = cursor.fetchall()
             conn.close()
 
@@ -529,7 +530,7 @@ class TabAuxiliares(ttk.Frame):
             if selected != '' and self.id_bolsa_actual != 0:
                 cadena = f"UPDATE Bolsas SET Bolsa = '{valor_bolsa}', TipoBolsaID = {self.id_tipo_bolsa_bolsas_actual}, SeccionID = {self.id_seccion_bolsas_actual} WHERE BolsaID = {self.id_bolsa_actual}"
             else:
-                cadena = f"INSERT INTO Bolsas (Bolsa, TipoBolsaID) VALUES ('{valor_bolsa}', {self.id_tipo_bolsa_bolsas_actual})"
+                cadena = f"INSERT INTO Bolsas (Bolsa, TipoBolsaID, SeccionID) VALUES ('{valor_bolsa}', {self.id_tipo_bolsa_bolsas_actual}, {self.app.id_seccion_actual})"
             cursor.execute(cadena)
             conn.commit()
             conn.close()

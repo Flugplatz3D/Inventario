@@ -164,7 +164,7 @@ class TabDetalle(ttk.Frame):
         cadena += f"and c.SeccionID = {id_seccion} and b.SeccionID = {id_seccion} and f.SeccionID = {id_seccion} "
         cadena += "and c.TipoCajaID = tc.TipoCajaID "
         cadena += "and b.TipoBolsaID = tb.TipoBolsaID "
-        print(cadena)
+        # print(cadena)
         if texto1:
             cadena += f" AND d.Descripcion LIKE '%{texto1}%'"
         if texto2:
@@ -313,17 +313,17 @@ class TabDetalle(ttk.Frame):
     def comboCajasClick(self, event):
         selected = self.comboCajas.get()
         self.id_caja_actual = self.idsCajas.get(selected, 0)
-        self.buscar()  # Actualizar vista al cambiar filtro
+        self.buscar()
 
     def comboBolsasClick(self, event):
         selected = self.comboBolsas.get()
         self.id_bolsa_actual = self.idsBolsas.get(selected, 0)
-        self.buscar()  # Actualizar vista al cambiar filtro
+        self.buscar()
 
     def comboClasificacionClick(self, event):
         selected = self.comboClasificaciones.get()
         self.id_clasificacion_actual = self.idsClasificacion.get(selected, 0)
-        self.buscar()  # Actualizar vista al cambiar filtro
+        self.buscar()
 
     def on_double_click(self, event):
         self.editar_detalle_click()

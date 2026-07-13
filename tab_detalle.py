@@ -241,8 +241,8 @@ class TabDetalle(ttk.Frame):
         self.id_caja_actual = 0
         self.id_bolsa_actual = 0
         self.id_clasificacion_actual = 0
-        self.intOrden.set(6)
-        self.intSentido.set(2)
+        self.intOrden.set(1)
+        self.intSentido.set(1)
         self.texto_label_recuento.set("")
 
         for item in self.tree.get_children():

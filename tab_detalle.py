@@ -422,6 +422,7 @@ class TabDetalle(ttk.Frame):
         ttk.Label(row, text="Descripción", width=13, anchor="e").pack(side="left")
         entry_desc = ttk.Entry(row, textvariable=var_desc, width=45)
         entry_desc.pack(side="left", padx=10, fill="x", expand=True)
+        self.agregar_menu_contextual(entry_desc)
 
         # Detalle
         row = ttk.Frame(frame)
@@ -429,6 +430,7 @@ class TabDetalle(ttk.Frame):
         ttk.Label(row, text="Detalle", width=13, anchor="e").pack(side="left")
         entry_detalle = ttk.Entry(row, textvariable=var_detalle, width=55)
         entry_detalle.pack(side="left", padx=10, fill="x", expand=True)
+        self.agregar_menu_contextual(entry_detalle)
 
         # Clasificacion (Combobox)
         row_clasificacion = ttk.Frame(frame)
@@ -582,6 +584,7 @@ class TabDetalle(ttk.Frame):
         ttk.Label(row, text="Descripción", width=13, anchor="e").pack(side="left")
         entry_desc = ttk.Entry(row, textvariable=var_desc, width=45)
         entry_desc.pack(side="left", padx=10, fill="x", expand=True)
+        self.agregar_menu_contextual(entry_desc)
 
         # Detalle
         row = ttk.Frame(frame)
@@ -589,6 +592,7 @@ class TabDetalle(ttk.Frame):
         ttk.Label(row, text="Detalle", width=13, anchor="e").pack(side="left")
         entry_detalle = ttk.Entry(row, textvariable=var_detalle, width=55)
         entry_detalle.pack(side="left", padx=10, fill="x", expand=True)
+        self.agregar_menu_contextual(entry_detalle)
 
         # Clasificación (Combobox)
         row = ttk.Frame(frame)
@@ -642,6 +646,7 @@ class TabDetalle(ttk.Frame):
         ttk.Label(row, text="Cantidad", width=13, anchor="e").pack(side="left")
         entry_cantidad = ttk.Entry(row, textvariable=var_cantidad, width=15)
         entry_cantidad.pack(side="left", padx=10)
+        self.agregar_menu_contextual(entry_cantidad)
 
         ttk.Separator(frame, orient="horizontal").pack(fill="x", pady=15)
 
@@ -747,3 +752,28 @@ class TabDetalle(ttk.Frame):
 
         except Exception as e:
             messagebox.showerror("Error", f"Error al filtrar bolsas: {e}")
+
+    def agregar_menu_contextual(self, widget):
+        """Añade menú contextual (clic derecho) a Entry o widgets similares"""
+        if not isinstance(widget, (tk.Entry, ttk.Entry)):
+            return
+
+        menu = tk.Menu(widget, tearoff=0)
+
+        def copiar():   widget.event_generate("<<Copy>>")
+        def cortar():   widget.event_generate("<<Cut>>")
+        def pegar():    widget.event_generate("<<Paste>>")
+        def seleccionar_todo():
+            widget.select_range(0, tk.END)
+            widget.icursor(tk.END)
+
+        menu.add_command(label="Copiar", command=copiar)
+        menu.add_command(label="Cortar", command=cortar)
+        menu.add_command(label="Pegar", command=pegar)
+        menu.add_separator()
+        menu.add_command(label="Seleccionar todo", command=seleccionar_todo)
+
+        def mostrar(event):
+            menu.tk_popup(event.x_root, event.y_root)
+
+        widget.bind("<Button-3>", mostrar)

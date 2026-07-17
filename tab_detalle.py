@@ -69,8 +69,8 @@ class TabDetalle(ttk.Frame):
         self.comboClasificaciones.bind("<<ComboboxSelected>>", self.comboClasificacionClick)
 
         # Botones de búsqueda
-        tk.Button(self, text="Buscar", command=self.buscar, width=10).place(x=890, y=10)
-        tk.Button(self, text="Limpiar", command=self.limpiar, width=10).place(x=980, y=10)
+        tk.Button(self, text="Buscar", command=self.buscar, width=11).place(x=1000, y=10)
+        tk.Button(self, text="Limpiar", command=self.limpiar, width=11).place(x=1100, y=10)
 
         self.botonDetalle = tk.Button(self, text="Detalle", 
                                     command=self.mostrar_editar_detalle_modal,
@@ -90,22 +90,22 @@ class TabDetalle(ttk.Frame):
 
         # Radiobuttons para orden
         rb1_1 = ttk.Radiobutton(self, text="Descripción", variable=self.intOrden, 
-                        value=1, command=self.buscar).place(x=660, y=70)
+                        value=1, command=self.buscar).place(x=700, y=70)
         rb1_2 = ttk.Radiobutton(self, text="Clasificación", variable=self.intOrden, 
-                        value=2, command=self.buscar).place(x=750, y=70)
+                        value=2, command=self.buscar).place(x=800, y=70)
         rb1_3 = ttk.Radiobutton(self, text="Detalle", variable=self.intOrden, 
-                        value=3, command=self.buscar).place(x=847, y=70)
+                        value=3, command=self.buscar).place(x=900, y=70)
         rb1_4 = ttk.Radiobutton(self, text="Caja", variable=self.intOrden, 
-                        value=4, command=self.buscar).place(x=910, y=70)
+                        value=4, command=self.buscar).place(x=980, y=70)
         rb1_5 = ttk.Radiobutton(self, text="Bolsa", variable=self.intOrden, 
-                        value=5, command=self.buscar).place(x=963, y=70)
+                        value=5, command=self.buscar).place(x=1050, y=70)
         rb1_6 = ttk.Radiobutton(self, text="ID", variable=self.intOrden, 
-                        value=6, command=self.buscar).place(x=1020, y=70)
+                        value=6, command=self.buscar).place(x=1130, y=70)
         # Radiobuttons para sentido
         rb2_1 = ttk.Radiobutton(self, text="ASC", variable=self.intSentido, 
-                        value=1, command=self.buscar).place(x=660, y=110)
+                        value=1, command=self.buscar).place(x=700, y=110)
         rb2_2 = ttk.Radiobutton(self, text="DESC", variable=self.intSentido, 
-                        value=2, command=self.buscar).place(x=720, y=110)
+                        value=2, command=self.buscar).place(x=760, y=110)
 
         # ==================== TREEVIEW ====================
         self.tree = ttk.Treeview(self, columns=("Descripcion", "Clasificacion", "Detalle", 
@@ -113,15 +113,15 @@ class TabDetalle(ttk.Frame):
                                  show="headings", height=15, selectmode="extended")
 
         columnas = {
-            "Descripcion":   ("Descripción", 170),
+            "Descripcion":   ("Descripción", 215),
             "Clasificacion": ("Clasificación", 145),
-            "Detalle":       ("Detalle", 160),
-            "Caja":          ("Caja", 155),
-            "TipoCaja":      ("TipoCaja", 90),
-            "Bolsa":         ("Bolsa", 120),
-            "TipoBolsa":     ("TipoBolsa", 115),
+            "Detalle":       ("Detalle", 220),
+            "Caja":          ("Caja", 135),
+            "TipoCaja":      ("TipoCaja", 128),
+            "Bolsa":         ("Bolsa", 130),
+            "TipoBolsa":     ("TipoBolsa", 116),
             "Cantidad":      ("Cantidad", 56),
-            "id":            ("ID", 35)
+            "id":            ("ID", 40)
         }
 
         for col, (texto, ancho) in columnas.items():
@@ -130,15 +130,15 @@ class TabDetalle(ttk.Frame):
             self.tree.column(col, width=ancho, anchor=tk.W, stretch=False)
 
         self.tree.column('#0', width=0, stretch=False)
-        self.tree.place(x=10, y=160, width=1048, height=328)
+        self.tree.place(x=10, y=160, width=1188, height=328)
 
         # Scrollbars
         scroll_y = ttk.Scrollbar(self, orient=tk.VERTICAL, command=self.tree.yview)
         scroll_x = ttk.Scrollbar(self, orient=tk.HORIZONTAL, command=self.tree.xview)
         self.tree.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
 
-        scroll_x.place(x=10, y=490, width=1048)
-        scroll_y.place(x=1060, y=160, height=328)
+        scroll_x.place(x=10, y=490, width=1188)
+        scroll_y.place(x=1200, y=160, height=328)
 
         # Bindings
         self.tree.bind("<Double-1>", self.on_double_click)

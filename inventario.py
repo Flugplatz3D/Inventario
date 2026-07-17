@@ -11,12 +11,13 @@ DB_NAME = "inventario.db"
 class InventarioApp(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.iconbitmap('warehouse_storage.ico')
         self.title("Inventario")
         screen_width = self.winfo_screenwidth()
         screen_height = self.winfo_screenheight()
-        width = 1100
-        height = 580
-        x = (screen_width/2) - (width/2)
+        width = 1240
+        height = 600
+        x = (screen_width/2) - (width/2) - 10
         y = (screen_height/2) - (height/2) - 40
         self.geometry('%dx%d+%d+%d' % (width, height, x, y))
         self.resizable(False, False)

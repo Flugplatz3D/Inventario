@@ -484,6 +484,7 @@ class TabDetalle(ttk.Frame):
         ttk.Label(row, text="Cantidad", width=13, anchor="e").pack(side="left")
         entry_cantidad = ttk.Entry(row, textvariable=var_cantidad, width=55)
         entry_cantidad.pack(side="left", padx=10, fill="x", expand=False)
+        self.agregar_menu_contextual(entry_cantidad)
 
         # ID (solo lectura)
         row = ttk.Frame(frame)

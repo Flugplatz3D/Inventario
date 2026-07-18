@@ -97,7 +97,7 @@ class InventarioApp(tk.Tk):
         y = (screen_height/2) - (height/2) - 60
         ventana_modal.geometry('%dx%d+%d+%d' % (width, height, x, y))
         ventana_modal.resizable(False, False)
-        label = tk.Label(ventana_modal, text="Inventario App Versión 1.1.5\n© 2026\n(Flugplatz3D)", font=("Arial", 11), justify="center")
+        label = tk.Label(ventana_modal, text="Inventario App Versión 1.1.6\n© 2026\n(Flugplatz3D)", font=("Arial", 11), justify="center")
         label.pack(pady=10)
         tk.Button(ventana_modal, text="Cerrar", command=ventana_modal.destroy, width=10).pack(pady=20)
         # Esto bloquea la ventana principal

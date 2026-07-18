@@ -43,13 +43,20 @@ select t.TipoCaja, s.seccion from tiposCaja t, cajas c, secciones s where c.Caja
 and t.TipoCajaID = c.TipoCajaID and c.SeccionID = s.SeccionID
 
 select t.TipoBolsa, s.seccion from tiposBolsa t, bolsas c, secciones s where c.BolsaID = 18 
-and t.TipoBolsaID = c.TipoBolsaID and c.SeccionID = s.SeccionID*/
+and t.TipoBolsaID = c.TipoBolsaID and c.SeccionID = s.SeccionID
 
 select d.Descripcion, f.Clasificacion, d.Detalle, c.Caja, tc.TipoCaja, b.Bolsa, tb.TipoBolsa, d.Cantidad, d.DetalleID 
 from detalles d, cajas c, bolsas b, clasificaciones f, TiposCaja tc, tiposBolsa tb 
 where d.CajaID = c.CajaID 
 and d.BolsaID = b.BolsaID 
-and c.SeccionID = 4 and b.SeccionID = 4 and f.SeccionID = 4
+and c.SeccionID = 5 and b.SeccionID = 5 and f.SeccionID = 5
 and d.ClasificacionID = f.ClasificacionID 
 and c.TipoCajaID = tc.TipoCajaID 
-and b.TipoBolsaID = tb.TipoBolsaID 
+and b.TipoBolsaID = tb.TipoBolsaID */
+
+
+select dt.Descripcion, dt.Detalle, cj.Caja, bl.Bolsa, cl.Clasificacion, sc.seccion, dt.cantidad
+from detalles dt, cajas cj, bolsas bl, clasificaciones cl, secciones sc
+where dt.CajaID = cj.CajaID and dt.BolsaID = bl.BolsaID and dt.ClasificacionID = cl.ClasificacionID
+and cj.SeccionID = sc.SeccionID and bl.SeccionID = sc.SeccionID and cl.SeccionID = sc.SeccionID
+order by sc.SeccionID, cj.CajaID, dt.DetalleID

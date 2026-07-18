@@ -1,4 +1,5 @@
 Aplicación Inventario Python/SQLite3/TTK-TKinter
+Mucha ayuda de xAI mediante GROK.
 
 Para compilar:
 

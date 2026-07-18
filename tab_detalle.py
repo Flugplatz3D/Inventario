@@ -221,6 +221,12 @@ class TabDetalle(ttk.Frame):
             for row in rows:
                 self.tree.insert('', 'end', values=row)
 
+            if rows:
+                first_item = self.tree.get_children()[0]
+                self.tree.selection_set(first_item)
+                self.tree.focus(first_item)
+                self.tree.see(first_item)
+
             if not rows:
                 self.botonDetalle.config(state=tk.DISABLED)
                 self.botonEliminar.config(state=tk.DISABLED)

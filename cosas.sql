@@ -52,11 +52,18 @@ and d.BolsaID = b.BolsaID
 and c.SeccionID = 5 and b.SeccionID = 5 and f.SeccionID = 5
 and d.ClasificacionID = f.ClasificacionID 
 and c.TipoCajaID = tc.TipoCajaID 
-and b.TipoBolsaID = tb.TipoBolsaID */
+and b.TipoBolsaID = tb.TipoBolsaID 
+
+select * from detalles where ClasificacionID = 9
+*/
 
 
-select dt.Descripcion, dt.Detalle, cj.Caja, bl.Bolsa, cl.Clasificacion, sc.seccion, dt.cantidad
+select dt.DetalleID, dt.Descripcion, dt.Detalle, cj.Caja, bl.Bolsa, cl.Clasificacion, sc.seccion, dt.cantidad
 from detalles dt, cajas cj, bolsas bl, clasificaciones cl, secciones sc
 where dt.CajaID = cj.CajaID and dt.BolsaID = bl.BolsaID and dt.ClasificacionID = cl.ClasificacionID
 and cj.SeccionID = sc.SeccionID and bl.SeccionID = sc.SeccionID and cl.SeccionID = sc.SeccionID
 order by sc.SeccionID, cj.CajaID, dt.DetalleID
+
+
+
+

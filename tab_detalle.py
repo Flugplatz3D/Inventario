@@ -273,7 +273,7 @@ class TabDetalle(ttk.Frame):
             self.comboCajas['values'] = self.cajas
             self.comboCajas.set("")
         except Exception as e:
-            print("Error cargando cajas:", e)
+            messagebox.showerror("Error", f"Error cargando cajas:\n{e}")
 
     def llenarBolsas(self):
         try:
@@ -292,7 +292,7 @@ class TabDetalle(ttk.Frame):
             self.comboBolsas['values'] = self.bolsas
             self.comboBolsas.set("")
         except Exception as e:
-            print("Error cargando bolsas:", e)
+            messagebox.showerror("Error", f"Error cargando bolsas:\n{e}")
     
     def llenarClasificacion(self):
         try:
@@ -314,7 +314,7 @@ class TabDetalle(ttk.Frame):
             self.comboClasificaciones['values'] = self.clasificacion
             self.comboClasificaciones.set("")
         except Exception as e:
-            print("Error cargando Clasificacion:", e)
+            messagebox.showerror("Error", f"Error cargando clasificaciones:\n{e}")
 
     def comboCajasClick(self, event):
         selected = self.comboCajas.get()
@@ -419,8 +419,6 @@ class TabDetalle(ttk.Frame):
         var_cantidad = tk.StringVar(value=cantidad)
         self.var_tipo_caja = tk.StringVar(value=tipocaja)
         self.var_tipo_bolsa = tk.StringVar(value=tipobolsa)
-
-        # print(self.var_tipo_bolsa.get())
 
         # Descripción
         row = ttk.Frame(frame)

@@ -50,6 +50,11 @@ class InventarioApp(tk.Tk):
                     command=self.modal_configuracion,
                     compound=tk.LEFT
                 )
+        menu_opciones.add_command(
+                    label="Generar CSV",
+                    command=self.modal_csv,
+                    compound=tk.LEFT
+                )
         self.bind_all("<Control-n>", self.modal_configuracion)
         menu_opciones.add_separator()
         menu_opciones.add_command(label="Salir", command=self.destroy)
@@ -74,8 +79,9 @@ class InventarioApp(tk.Tk):
                 if result:
                     return result[0]
             except Exception as e:
-                print("Error al leer el ID de la sección:", e)  
-        return 0  # Devuelve 0 si no se encuentra la sección o hay un error
+                messagebox.showerror("Error", f"Error al leer el ID de la sección:\n{e}")
+
+        return 0
 
     def leer_config(self, entrada, clave, valor_por_defecto):
         config = configparser.ConfigParser()
@@ -97,14 +103,14 @@ class InventarioApp(tk.Tk):
         y = (screen_height/2) - (height/2) - 60
         ventana_modal.geometry('%dx%d+%d+%d' % (width, height, x, y))
         ventana_modal.resizable(False, False)
-        label = tk.Label(ventana_modal, text="Inventario App Versión 1.1.6\n© 2026\n(Flugplatz3D)", font=("Arial", 11), justify="center")
+        label = tk.Label(ventana_modal, text="Inventario App Versión 1.1.7\n© 2026\n(Flugplatz3D)", font=("Arial", 11), justify="center")
         label.pack(pady=10)
         tk.Button(ventana_modal, text="Cerrar", command=ventana_modal.destroy, width=10).pack(pady=20)
         # Esto bloquea la ventana principal
         ventana_modal.grab_set()
         ventana_modal.focus()
 
-    def modal_configuracion(self, event=None):
+    def modal_configuracion(self, event = None):
         ventana_modal = tk.Toplevel(self)
         ventana_modal.title("Configuración")
         width = 380
@@ -150,6 +156,9 @@ class InventarioApp(tk.Tk):
         ventana_modal.grab_set()
         ventana_modal.focus()
 
+    def modal_csv(self,event = None):
+        messagebox.showinfo("Generar CSV", "En construccion")
+
     def combo_secciones_click(self, event):
         selected = self.combo_secciones.get()
         self.id_seccion_actual = self.ids_seccion.get(selected, 0)
@@ -158,7 +167,8 @@ class InventarioApp(tk.Tk):
         try:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
-            cursor.execute("SELECT SeccionID, Seccion FROM Secciones ORDER BY upper(Seccion)")
+            cadena = "SELECT SeccionID, Seccion FROM Secciones ORDER BY upper(Seccion)"
+            cursor.execute(cadena)
             rows = cursor.fetchall()
             conn.close()
 
@@ -168,7 +178,7 @@ class InventarioApp(tk.Tk):
             self.combo_secciones['values'] = self.secciones
             
         except Exception as e:
-            print("Error cargando Secciones:", e)
+            messagebox.showerror("Error",f"Error cargando secciones\n{e}")
 
     def guardar_configuracion(self, ventana_modal, seccion):
         
@@ -213,7 +223,6 @@ class InventarioApp(tk.Tk):
             valor = self.tab_detalle.comboBolsas.get()
             self.tab_detalle.llenarBolsas()
             if valor:
-                # messagebox.showinfo("bolsas", valor)
                 self.tab_detalle.comboBolsas.set(valor)
             valor = self.tab_detalle.comboClasificaciones.get()
             self.tab_detalle.llenarClasificacion()

@@ -282,7 +282,7 @@ class TabAuxiliares(ttk.Frame):
             self.comboClasificaciones['values'] = self.clasificacion
             self.comboClasificaciones.set("")
         except Exception as e:
-            print("Error cargando Clasificacion:", e)
+            messagebox.showerror("Error", f"Error cargando Clasificacion:\n{e}")
 
     def llenar_cajas(self):
         try:
@@ -302,8 +302,8 @@ class TabAuxiliares(ttk.Frame):
             self.combo_cajas['values'] = self.caja
             self.combo_cajas.set("")
         except Exception as e:
-            print("Error cargando Cajas:", e)
-
+            messagebox.showerror("Error", f"Error cargando cajas:\n{e}")
+            
     def llenar_tipos_caja_cajas(self):
         try:
             conn = sqlite3.connect(DB_NAME)
@@ -319,7 +319,7 @@ class TabAuxiliares(ttk.Frame):
             self.combo_tipo_caja_cajas['values'] = self.tipos_caja_cajas
             self.combo_tipo_caja_cajas.set("")
         except Exception as e:
-            print("Error cargando Tipos de Caja:", e)
+            messagebox.showerror("Error", f"Error cargando Tipos de Caja:\n{e}")
 
     def llenar_bolsas(self):
         try:
@@ -339,7 +339,7 @@ class TabAuxiliares(ttk.Frame):
             self.combo_bolsas['values'] = self.bolsas
             self.combo_bolsas.set("")
         except Exception as e:
-            print("Error cargando Bolsas:", e)
+            messagebox.showerror("Error", f"Error cargando Bolsas:\n{e}")
 
     def llenar_tipos_bolsa_bolsas(self):
         try:
@@ -358,7 +358,7 @@ class TabAuxiliares(ttk.Frame):
             self.combo_tipo_bolsa_bolsas['values'] = self.tipos_bolsa_bolsas
             self.combo_tipo_bolsa_bolsas.set("")
         except Exception as e:
-            print("Error cargando Tipos de Bolsa:", e)
+            messagebox.showerror("Error", f"Error cargando Tipos de Bolsa:\n{e}")
 
     def llenar_tipos_caja(self):
         try:
@@ -394,7 +394,7 @@ class TabAuxiliares(ttk.Frame):
             self.combo_tipo_bolsa['values'] = self.tipos_bolsa
             self.combo_tipo_bolsa.set("")
         except Exception as e:
-            print("Error cargando Tipos de Bolsa:", e)
+            messagebox.showerror("Error", f"Error cargando Tipos de Bolsa:\n{e}")
 
     def llenar_secciones(self):
         try:
@@ -414,7 +414,7 @@ class TabAuxiliares(ttk.Frame):
             self.combo_secciones['values'] = self.secciones
             self.combo_secciones.set("")
         except Exception as e:
-            print("Error cargando Secciones:", e)
+            messagebox.showerror("Error", f"Error cargando Secciones:\n{e}")
 
     def nuevo_clasificacion(self):
         self.entrada_clasificacion.delete(0, tk.END)
@@ -626,23 +626,24 @@ class TabAuxiliares(ttk.Frame):
         if selected == '':
             return
         total = self.contar_registros_asociados(self.id_clasificacion_actual, "ClasificacionID", "detalles")
-        try:
-            conn = sqlite3.connect(DB_NAME)
-            cursor = conn.cursor()
-            if total > 0:
-                messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
+        if total != -1:
+            try:
+                conn = sqlite3.connect(DB_NAME)
+                cursor = conn.cursor()
+                if total > 0:
+                    messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
+                    conn.close()
+                    return
+                cadena = f"DELETE FROM Clasificaciones WHERE ClasificacionID = {self.id_clasificacion_actual}"
+                cursor.execute(cadena)
+                conn.commit()
                 conn.close()
-                return
-            cadena = f"DELETE FROM Clasificaciones WHERE ClasificacionID = {self.id_clasificacion_actual}"
-            cursor.execute(cadena)
-            conn.commit()
-            conn.close()
-            self.nuevo_clasificacion()
-            self.llenar_clasificacion()
-            self.entrada_clasificacion.focus_set()
-            messagebox.showinfo("Éxito", "Registro eliminado correctamente")
-        except Exception as e:
-            messagebox.showerror("Error", f"No se pudo eliminar:\n{e}")
+                self.nuevo_clasificacion()
+                self.llenar_clasificacion()
+                self.entrada_clasificacion.focus_set()
+                messagebox.showinfo("Éxito", "Registro eliminado correctamente")
+            except Exception as e:
+                messagebox.showerror("Error", f"No se pudo eliminar:\n{e}")
 
     def eliminar_caja(self):
         selected = self.combo_cajas.get()
@@ -650,24 +651,25 @@ class TabAuxiliares(ttk.Frame):
         if selected == '':
             return
         total = self.contar_registros_asociados(self.id_caja_actual, "CajaID", "detalles")
-        try:    
-            conn = sqlite3.connect(DB_NAME)
-            cursor = conn.cursor()
-            if total > 0:
-                messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
+        if total != -1:
+            try:    
+                conn = sqlite3.connect(DB_NAME)
+                cursor = conn.cursor()
+                if total > 0:
+                    messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
+                    conn.close()
+                    return
+                cadena = f"DELETE FROM Cajas WHERE CajaID = {self.id_caja_actual}"
+                cursor.execute(cadena)
+                conn.commit()
                 conn.close()
-                return
-            cadena = f"DELETE FROM Cajas WHERE CajaID = {self.id_caja_actual}"
-            cursor.execute(cadena)
-            conn.commit()
-            conn.close()
-            self.nuevo_caja()
-            self.llenar_cajas()
-            self.llenar_tipos_caja_cajas()
-            self.entrada_cajas.focus_set()
-            messagebox.showinfo("Éxito", "Registro eliminado correctamente")
-        except Exception as e:
-            messagebox.showerror("Error", f"No se pudo eliminar:\n{e}")
+                self.nuevo_caja()
+                self.llenar_cajas()
+                self.llenar_tipos_caja_cajas()
+                self.entrada_cajas.focus_set()
+                messagebox.showinfo("Éxito", "Registro eliminado correctamente")
+            except Exception as e:
+                messagebox.showerror("Error", f"No se pudo eliminar:\n{e}")
 
     def eliminar_bolsa(self):
         selected = self.combo_bolsas.get()
@@ -675,24 +677,25 @@ class TabAuxiliares(ttk.Frame):
         if selected == '':
             return
         total = self.contar_registros_asociados(self.id_bolsa_actual, "BolsaID", "detalles")
-        try:
-            conn = sqlite3.connect(DB_NAME)
-            cursor = conn.cursor()
-            if total > 0:
-                messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
+        if total != -1:
+            try:
+                conn = sqlite3.connect(DB_NAME)
+                cursor = conn.cursor()
+                if total > 0:
+                    messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
+                    conn.close()
+                    return
+                cadena = f"DELETE FROM Bolsas WHERE BolsaID = {self.id_bolsa_actual}"
+                cursor.execute(cadena)
+                conn.commit()
                 conn.close()
-                return
-            cadena = f"DELETE FROM Bolsas WHERE BolsaID = {self.id_bolsa_actual}"
-            cursor.execute(cadena)
-            conn.commit()
-            conn.close()
-            self.nuevo_bolsa()
-            self.llenar_bolsas()
-            self.llenar_tipos_bolsa_bolsas()
-            self.entrada_bolsa.focus_set()
-            messagebox.showinfo("Éxito", "Registro eliminado correctamente")
-        except Exception as e:
-            messagebox.showerror("Error", f"No se pudo eliminar:\n{e}")
+                self.nuevo_bolsa()
+                self.llenar_bolsas()
+                self.llenar_tipos_bolsa_bolsas()
+                self.entrada_bolsa.focus_set()
+                messagebox.showinfo("Éxito", "Registro eliminado correctamente")
+            except Exception as e:
+                messagebox.showerror("Error", f"No se pudo eliminar:\n{e}")
 
     def eliminar_tipo_caja(self):
         selected = self.combo_tipo_caja.get()
@@ -700,24 +703,25 @@ class TabAuxiliares(ttk.Frame):
         if selected == '':
             return
         total = self.contar_registros_asociados(self.id_tipo_caja_actual, "TipoCajaID", "cajas")
-        try:
-            conn = sqlite3.connect(DB_NAME)
-            cursor = conn.cursor()
-            if total > 0:
-                messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
+        if total != -1:
+            try:
+                conn = sqlite3.connect(DB_NAME)
+                cursor = conn.cursor()
+                if total > 0:
+                    messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
+                    conn.close()
+                    return
+                cadena = f"DELETE FROM TiposCaja WHERE TipoCajaID = {self.id_tipo_caja_actual}"
+                cursor.execute(cadena)
+                conn.commit()
                 conn.close()
-                return
-            cadena = f"DELETE FROM TiposCaja WHERE TipoCajaID = {self.id_tipo_caja_actual}"
-            cursor.execute(cadena)
-            conn.commit()
-            conn.close()
-            self.nuevo_tipo_caja()
-            self.llenar_tipos_caja()
-            self.llenar_tipos_caja_cajas()
-            self.entrada_tipo_caja.focus_set()
-            messagebox.showinfo("Éxito", "Registro eliminado correctamente")
-        except Exception as e:
-            messagebox.showerror("Error", f"No se pudo eliminar:\n{e}")
+                self.nuevo_tipo_caja()
+                self.llenar_tipos_caja()
+                self.llenar_tipos_caja_cajas()
+                self.entrada_tipo_caja.focus_set()
+                messagebox.showinfo("Éxito", "Registro eliminado correctamente")
+            except Exception as e:
+                messagebox.showerror("Error", f"No se pudo eliminar:\n{e}")
 
     def eliminar_tipo_bolsa(self):
         selected = self.combo_tipo_bolsa.get()
@@ -725,24 +729,25 @@ class TabAuxiliares(ttk.Frame):
         if selected == '':
             return
         total = self.contar_registros_asociados(self.id_tipo_bolsa_actual, "TipoBolsaID", "bolsas")
-        try:
-            conn = sqlite3.connect(DB_NAME)
-            cursor = conn.cursor()
-            if total > 0:
-                messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
+        if total != -1:
+            try:
+                conn = sqlite3.connect(DB_NAME)
+                cursor = conn.cursor()
+                if total > 0:
+                    messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
+                    conn.close()
+                    return
+                cadena = f"DELETE FROM TiposBolsa WHERE TipoBolsaID = {self.id_tipo_bolsa_actual}"
+                cursor.execute(cadena)
+                conn.commit()
                 conn.close()
-                return
-            cadena = f"DELETE FROM TiposBolsa WHERE TipoBolsaID = {self.id_tipo_bolsa_actual}"
-            cursor.execute(cadena)
-            conn.commit()
-            conn.close()
-            self.nuevo_tipo_bolsa()
-            self.llenar_tipos_bolsa()
-            self.llenar_tipos_bolsa_bolsas()
-            self.entrada_tipo_bolsa.focus_set()
-            messagebox.showinfo("Éxito", "Registro eliminado correctamente")
-        except Exception as e:
-            messagebox.showerror("Error", f"No se pudo eliminar:\n{e}")
+                self.nuevo_tipo_bolsa()
+                self.llenar_tipos_bolsa()
+                self.llenar_tipos_bolsa_bolsas()
+                self.entrada_tipo_bolsa.focus_set()
+                messagebox.showinfo("Éxito", "Registro eliminado correctamente")
+            except Exception as e:
+                messagebox.showerror("Error", f"No se pudo eliminar:\n{e}")
 
     def eliminar_seccion(self):
         selected = self.combo_secciones.get()
@@ -750,23 +755,24 @@ class TabAuxiliares(ttk.Frame):
         if selected == '':
             return
         total = self.contar_registros_asociados(self.id_seccion_actual, "SeccionID", "detalles")
-        try:
-            conn = sqlite3.connect(DB_NAME)
-            cursor = conn.cursor()
-            if total > 0:
-                messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
+        if total != -1:
+            try:
+                conn = sqlite3.connect(DB_NAME)
+                cursor = conn.cursor()
+                if total > 0:
+                    messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
+                    conn.close()
+                    return
+                cadena = f"DELETE FROM Secciones WHERE SeccionID = {self.id_seccion_actual}"
+                cursor.execute(cadena)
+                conn.commit()
                 conn.close()
-                return
-            cadena = f"DELETE FROM Secciones WHERE SeccionID = {self.id_seccion_actual}"
-            cursor.execute(cadena)
-            conn.commit()
-            conn.close()
-            self.nuevo_seccion()
-            self.llenar_secciones()
-            self.entrada_seccion.focus_set()
-            messagebox.showinfo("Éxito", "Registro eliminado correctamente")
-        except Exception as e:
-            messagebox.showerror("Error", f"No se pudo eliminar:\n{e}")
+                self.nuevo_seccion()
+                self.llenar_secciones()
+                self.entrada_seccion.focus_set()
+                messagebox.showinfo("Éxito", "Registro eliminado correctamente")
+            except Exception as e:
+                messagebox.showerror("Error", f"No se pudo eliminar:\n{e}")
             
     def combo_clasificaciones_click(self, event):
         selected = self.comboClasificaciones.get()
@@ -848,8 +854,6 @@ class TabAuxiliares(ttk.Frame):
         self.entrada_seccion.delete(0, tk.END)
         self.entrada_seccion.insert(0, selected)
         self.seccion_labelID.set(str(self.id_seccion_actual))
-        
-        # print(f"Sección seleccionada: {selected}, ID: {self.id_seccion_actual}")
 
     def contar_registros_asociados(self, valor_id, campo, tabla):
         try:

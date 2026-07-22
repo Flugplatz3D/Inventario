@@ -46,7 +46,7 @@ class InventarioApp(tk.Tk):
         self.config(menu=barra_menus)
         menu_opciones = tk.Menu(barra_menus, tearoff=False)
         menu_opciones.add_command(
-                    label="Configuración",
+                    label="Cambiar Sección",
                     command=self.modal_configuracion,
                     compound=tk.LEFT
                 )
@@ -59,7 +59,7 @@ class InventarioApp(tk.Tk):
         menu_opciones.add_separator()
         menu_opciones.add_command(label="Salir", command=self.destroy)
 
-        barra_menus.add_cascade(label="Opciones", menu=menu_opciones)
+        barra_menus.add_cascade(label="Utilidades", menu=menu_opciones)
         menu_ayuda = tk.Menu(barra_menus, tearoff=0)
         menu_ayuda.add_command(label="Acerca de", command=self.modal_acerca_de)
         barra_menus.add_cascade(label="Ayuda", menu=menu_ayuda)
@@ -112,7 +112,7 @@ class InventarioApp(tk.Tk):
 
     def modal_configuracion(self, event = None):
         ventana_modal = tk.Toplevel(self)
-        ventana_modal.title("Configuración")
+        ventana_modal.title("Cambiar Sección")
         width = 380
         height = 150
         screen_width = ventana_modal.winfo_screenwidth()
@@ -139,11 +139,11 @@ class InventarioApp(tk.Tk):
         self.combo_secciones.bind("<<ComboboxSelected>>", self.combo_secciones_click)
 
         # Botón Guardar
-        boton_guardar = ttk.Button(
+        boton_aceptar = ttk.Button(
                                 ventana_modal, 
-                                text="Guardar", 
+                                text="Aceptar", 
                                 command=lambda: self.guardar_configuracion(ventana_modal, self.combo_secciones.get()))
-        boton_guardar.grid(row=3, column=1, sticky="E", padx=10, pady=15)
+        boton_aceptar.grid(row=3, column=1, sticky="E", padx=10, pady=15)
 
         # Botón Cancelar
         boton_cancelar = ttk.Button(ventana_modal, text="Cancelar", command=ventana_modal.destroy)
@@ -157,7 +157,7 @@ class InventarioApp(tk.Tk):
         ventana_modal.focus()
 
     def modal_csv(self,event = None):
-        messagebox.showinfo("Generar CSV", "En construccion")
+        messagebox.showinfo("Generar CSV", "Pendiente de desarrollo")
 
     def combo_secciones_click(self, event):
         selected = self.combo_secciones.get()

@@ -2,7 +2,7 @@ Aplicación Inventario Python/SQLite3/TTK-TKinter
 
 Para compilar:
 
-cd C:\gitub\Inventario
+cd C:\gitub\Inventario  <-- Donde esten todos los archivos
 
 pyinstaller --onefile --windowed --clean --icon=warehouse_storage.ico --name Inventario --add-data "inventario.db;." inventario.py
 

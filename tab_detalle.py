@@ -243,6 +243,12 @@ class TabDetalle(ttk.Frame):
         self.comboCajas.set('')
         self.comboBolsas.set('')
         self.comboClasificaciones.set('')
+        self.app.tab_aux.nuevo_seccion()
+        self.app.tab_aux.nuevo_caja()
+        self.app.tab_aux.nuevo_bolsa()
+        self.app.tab_aux.nuevo_clasificacion()
+        self.app.tab_aux.nuevo_tipo_caja()
+        self.app.tab_aux.nuevo_tipo_bolsa()
         
         self.id_caja_actual = 0
         self.id_bolsa_actual = 0

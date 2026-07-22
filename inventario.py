@@ -34,10 +34,11 @@ class InventarioApp(tk.Tk):
 
         # Pestaña Detalle
         self.tab_detalle = TabDetalle(self.notebook, self)
-        self.notebook.add(self.tab_detalle, text="📝 Detalle")
-
+ 
         # Pestaña Auxiliares        
         self.tab_aux = TabAuxiliares(self.notebook,self)
+        
+        self.notebook.add(self.tab_detalle, text="📝 Detalle")
         self.notebook.add(self.tab_aux, text="⚙️ Auxiliares")
 
         self.notebook.bind("<<NotebookTabChanged>>", self.on_tab_changed)

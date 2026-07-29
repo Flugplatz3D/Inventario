@@ -232,9 +232,6 @@ class InventarioApp(tk.Tk):
 
             if len(self.tab_detalle.tree.get_children()) > 0:
                 self.tab_detalle.buscar()
-
-        # if self.notebook.select() == str(self.tab_aux):
-        #     print("En tab_aux")
     
 if __name__ == "__main__":
     app = InventarioApp()

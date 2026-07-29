@@ -249,7 +249,31 @@ class TabDetalle(ttk.Frame):
         self.app.tab_aux.nuevo_clasificacion()
         self.app.tab_aux.nuevo_tipo_caja()
         self.app.tab_aux.nuevo_tipo_bolsa()
-        
+
+        self.app.tab_aux.botonGuardarSeccion.config(state="disabled")
+        self.app.tab_aux.botonEliminarSeccion.config(state="disabled")
+        self.app.tab_aux.botonNuevoSeccion.config(state="normal")
+
+        self.app.tab_aux.botonGuardarCaja.config(state="disabled")
+        self.app.tab_aux.botonEliminarCaja.config(state="disabled")
+        self.app.tab_aux.botonNuevoCaja.config(state="normal")
+
+        self.app.tab_aux.botonGuardarBolsa.config(state="disabled")
+        self.app.tab_aux.botonEliminarBolsa.config(state="disabled")
+        self.app.tab_aux.botonNuevoBolsa.config(state="normal")
+
+        self.app.tab_aux.botonGuardarClasificacion.config(state="disabled")
+        self.app.tab_aux.botonEliminarClasificacion.config(state="disabled")
+        self.app.tab_aux.botonNuevoClasificacion.config(state="normal")
+
+        self.app.tab_aux.botonGuardarTipoCaja.config(state="disabled")
+        self.app.tab_aux.botonEliminarTipoCaja.config(state="disabled")
+        self.app.tab_aux.botonNuevoTipoCaja.config(state="normal")
+
+        self.app.tab_aux.botonGuardarTipoBolsa.config(state="disabled")
+        self.app.tab_aux.botonEliminarTipoBolsa.config(state="disabled")
+        self.app.tab_aux.botonNuevoTipoBolsa.config(state="normal")
+
         self.id_caja_actual = 0
         self.id_bolsa_actual = 0
         self.id_clasificacion_actual = 0
@@ -509,6 +533,8 @@ class TabDetalle(ttk.Frame):
         btn_frame.pack(pady=10)
 
         def guardar_cambios():
+            self.botonGuardar.config(state="disabled")
+            self.botonCancelar.config(state="disabled")
             nuevo_desc = var_desc.get().strip()
             nuevo_clasif = var_clasif.get().strip()
             nuevo_detalle = var_detalle.get().strip()
@@ -518,12 +544,16 @@ class TabDetalle(ttk.Frame):
 
             if not nuevo_desc or not nuevo_detalle or not nueva_cantidad:
                 messagebox.showwarning("Error", "Descripción, Detalle y Cantidad son obligatorios")
+                self.botonCancelar.config(state="normal")
+                self.botonGuardar.config(state="normal")
                 return
 
             if not nueva_caja or not nueva_bolsa or not nuevo_clasif:
                 messagebox.showwarning("Error", "Se debe seleccionar Caja, Bolsa y Clasificación")
+                self.botonCancelar.config(state="normal")
+                self.botonGuardar.config(state="normal")
                 return
-
+            
             try:
                 conn = sqlite3.connect(DB_NAME)
                 cursor = conn.cursor()
@@ -545,12 +575,13 @@ class TabDetalle(ttk.Frame):
 
             except Exception as e:
                 messagebox.showerror("Error", f"No se pudo guardar:\n{e}")
+                self.botonCancelar.config(state="normal")
 
-        ttk.Button(btn_frame, text="Guardar", command=guardar_cambios, 
-                   width=15).pack(side="left", padx=8)
+        self.botonGuardar = ttk.Button(btn_frame, text="Guardar", command=guardar_cambios, width=15)
+        self.botonGuardar.pack(side="left", padx=8)
         
-        ttk.Button(btn_frame, text="Cancelar", command=modal.destroy, 
-                   width=15).pack(side="left", padx=8)
+        self.botonCancelar = ttk.Button(btn_frame, text="Cancelar", command=modal.destroy, width=15)
+        self.botonCancelar.pack(side="left", padx=8)
 
         # Atajos de teclado
         modal.bind("<Escape>", lambda e: modal.destroy())
@@ -577,8 +608,7 @@ class TabDetalle(ttk.Frame):
         frame = ttk.Frame(modal, padding=20)
         frame.pack(fill="both", expand=True)
 
-        ttk.Label(frame, text="Nuevo Registro", 
-                  font=("Segoe UI", 14, "bold")).pack(pady=(0, 20))
+        ttk.Label(frame, text="Nuevo Registro", font=("Segoe UI", 14, "bold")).pack(pady=(0, 20))
 
         var_desc = tk.StringVar()
         var_clasif = tk.StringVar()
@@ -666,6 +696,8 @@ class TabDetalle(ttk.Frame):
         btn_frame.pack(pady=10)
 
         def guardar_nuevo():
+            self.botonGuardar.config(state="disabled")
+            self.botonCancelar.config(state="disabled")
             nuevo_desc = var_desc.get().strip()
             nuevo_detalle = var_detalle.get().strip()
             nuevo_clasif = var_clasif.get()
@@ -675,10 +707,14 @@ class TabDetalle(ttk.Frame):
 
             if not nuevo_desc or not nuevo_detalle:
                 messagebox.showwarning("Error", "Descripción y Detalle son obligatorios")
+                self.botonGuardar.config(state="normal")
+                self.botonCancelar.config(state="normal")
                 return
 
             if not nueva_caja or not nueva_bolsa or not nuevo_clasif:
                 messagebox.showwarning("Error", "Debe seleccionar Clasificación, Caja y Bolsa")
+                self.botonGuardar.config(state="normal")
+                self.botonCancelar.config(state="normal")
                 return
 
             try:
@@ -707,12 +743,14 @@ class TabDetalle(ttk.Frame):
 
             except Exception as e:
                 messagebox.showerror("Error", f"No se pudo guardar:\n{e}")
+                self.botonGuardar.config(state="normal")
+                self.botonCancelar.config(state="normal")
 
-        ttk.Button(btn_frame, text="Guardar", command=guardar_nuevo, 
-                   width=15).pack(side="left", padx=8)
+        self.botonGuardar = ttk.Button(btn_frame, text="Guardar", command=guardar_nuevo, width=15)
+        self.botonGuardar.pack(side="left", padx=8)
         
-        ttk.Button(btn_frame, text="Cancelar", command=modal.destroy, 
-                   width=15).pack(side="left", padx=8)
+        self.botonCancelar = ttk.Button(btn_frame, text="Cancelar", command=modal.destroy, width=15)
+        self.botonCancelar.pack(side="left", padx=8)
 
         # Atajos
         modal.bind("<Escape>", lambda e: modal.destroy())

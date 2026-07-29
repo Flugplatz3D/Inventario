@@ -107,10 +107,15 @@ class TabAuxiliares(ttk.Frame):
 
         btn_frame = ttk.Frame(self.frm_secciones)
         btn_frame.grid(row=3, column=0, columnspan=2, pady=20)
-        tk.Button(btn_frame, text="Nuevo", command=self.nuevo_seccion, width=10).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="Guardar", command=self.guardar_seccion, width=10).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="Eliminar", command=self.eliminar_seccion, width=10).pack(side="left", padx=5)
- 
+        self.botonNuevoSeccion = tk.Button(btn_frame, text="Nuevo", command=self.nuevo_seccion, width=10)
+        self.botonNuevoSeccion.pack(side="left", padx=5)
+        self.botonGuardarSeccion = tk.Button(btn_frame, text="Guardar", command=self.guardar_seccion, width=10)
+        self.botonGuardarSeccion.pack(side="left", padx=5)
+        self.botonGuardarSeccion.config(state="disabled")
+        self.botonEliminarSeccion = tk.Button(btn_frame, text="Eliminar", command=self.eliminar_seccion, width=10)
+        self.botonEliminarSeccion.pack(side="left", padx=5)
+        self.botonEliminarSeccion.config(state="disabled")
+
     def crear_frame_cajas(self):
 
         self.frm_cajas = ttk.LabelFrame(self, text="Cajas")
@@ -143,9 +148,14 @@ class TabAuxiliares(ttk.Frame):
 
         btn_frame = ttk.Frame(self.frm_cajas)
         btn_frame.grid(row=5, column=0, columnspan=2, pady=10)
-        tk.Button(btn_frame, text="Nuevo", command=self.nuevo_caja, width=10).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="Guardar", command=self.guardar_caja, width=10).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="Eliminar", command=self.eliminar_caja, width=10).pack(side="left", padx=5)
+        self.botonNuevoCaja = tk.Button(btn_frame, text="Nuevo", command=self.nuevo_caja, width=10)
+        self.botonNuevoCaja.pack(side="left", padx=5)
+        self.botonGuardarCaja = tk.Button(btn_frame, text="Guardar", command=self.guardar_caja, width=10)
+        self.botonGuardarCaja.pack(side="left", padx=5)
+        self.botonGuardarCaja.config(state="disabled")
+        self.botonEliminarCaja = tk.Button(btn_frame, text="Eliminar", command=self.eliminar_caja, width=10)
+        self.botonEliminarCaja.pack(side="left", padx=5)
+        self.botonEliminarCaja.config(state="disabled")
 
     def crear_frame_bolsas(self):
 
@@ -179,9 +189,14 @@ class TabAuxiliares(ttk.Frame):
 
         btn_frame = ttk.Frame(self.frm_bolsas)
         btn_frame.grid(row=5, column=0, columnspan=2, pady=10)
-        tk.Button(btn_frame, text="Nuevo", command=self.nuevo_bolsa, width=10).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="Guardar", command=self.guardar_bolsa, width=10).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="Eliminar", command=self.eliminar_bolsa, width=10).pack(side="left", padx=5)
+        self.botonNuevoBolsa = tk.Button(btn_frame, text="Nuevo", command=self.nuevo_bolsa, width=10)
+        self.botonNuevoBolsa.pack(side="left", padx=5)
+        self.botonGuardarBolsa = tk.Button(btn_frame, text="Guardar", command=self.guardar_bolsa, width=10)
+        self.botonGuardarBolsa.pack(side="left", padx=5)
+        self.botonGuardarBolsa.config(state="disabled")
+        self.botonEliminarBolsa = tk.Button(btn_frame, text="Eliminar", command=self.eliminar_bolsa, width=10)
+        self.botonEliminarBolsa.pack(side="left", padx=5)
+        self.botonEliminarBolsa.config(state="disabled")
 
     def crear_frame_clasificaciones(self):
 
@@ -208,9 +223,14 @@ class TabAuxiliares(ttk.Frame):
 
         btn_frame = ttk.Frame(self.frm_datos)
         btn_frame.grid(row=4, column=0, columnspan=2, pady=20)
-        tk.Button(btn_frame, text="Nuevo", command=self.nuevo_clasificacion, width=10).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="Guardar", command=self.guardar_clasificacion, width=10).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="Eliminar", command=self.eliminar_clasificacion, width=10).pack(side="left", padx=5)
+        self.botonNuevoClasificacion = tk.Button(btn_frame, text="Nuevo", command=self.nuevo_clasificacion, width=10)
+        self.botonNuevoClasificacion.pack(side="left", padx=5)
+        self.botonGuardarClasificacion = tk.Button(btn_frame, text="Guardar", command=self.guardar_clasificacion, width=10)
+        self.botonGuardarClasificacion.pack(side="left", padx=5)
+        self.botonGuardarClasificacion.config(state="disabled")
+        self.botonEliminarClasificacion = tk.Button(btn_frame, text="Eliminar", command=self.eliminar_clasificacion, width=10)
+        self.botonEliminarClasificacion.pack(side="left", padx=5)
+        self.botonEliminarClasificacion.config(state="disabled")
 
     def crear_frame_tipos_caja(self):
 
@@ -235,9 +255,14 @@ class TabAuxiliares(ttk.Frame):
 
         btn_frame = ttk.Frame(self.frm_tipos_caja)
         btn_frame.grid(row=3, column=0, columnspan=2, pady=20)
-        tk.Button(btn_frame, text="Nuevo", command=self.nuevo_tipo_caja, width=10).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="Guardar", command=self.guardar_tipo_caja, width=10).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="Eliminar", command=self.eliminar_tipo_caja, width=10).pack(side="left", padx=5)
+        self.botonNuevoTipoCaja = tk.Button(btn_frame, text="Nuevo", command=self.nuevo_tipo_caja, width=10)
+        self.botonNuevoTipoCaja.pack(side="left", padx=5)
+        self.botonGuardarTipoCaja = tk.Button(btn_frame, text="Guardar", command=self.guardar_tipo_caja, width=10)
+        self.botonGuardarTipoCaja.pack(side="left", padx=5)
+        self.botonGuardarTipoCaja.config(state="disabled")
+        self.botonEliminarTipoCaja = tk.Button(btn_frame, text="Eliminar", command=self.eliminar_tipo_caja, width=10)
+        self.botonEliminarTipoCaja.pack(side="left", padx=5)
+        self.botonEliminarTipoCaja.config(state="disabled")
 
     def crear_frame_tipos_bolsa(self):
         self.frm_tipos_bolsa = ttk.LabelFrame(self, text="Tipos Bolsa")
@@ -261,9 +286,14 @@ class TabAuxiliares(ttk.Frame):
 
         btn_frame = ttk.Frame(self.frm_tipos_bolsa)
         btn_frame.grid(row=3, column=0, columnspan=2, pady=20)
-        tk.Button(btn_frame, text="Nuevo", command=self.nuevo_tipo_bolsa, width=10).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="Guardar", command=self.guardar_tipo_bolsa, width=10).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="Eliminar", command=self.eliminar_tipo_bolsa, width=10).pack(side="left", padx=5)
+        self.botonNuevoTipoBolsa = tk.Button(btn_frame, text="Nuevo", command=self.nuevo_tipo_bolsa, width=10)
+        self.botonNuevoTipoBolsa.pack(side="left", padx=5)
+        self.botonGuardarTipoBolsa = tk.Button(btn_frame, text="Guardar", command=self.guardar_tipo_bolsa, width=10)
+        self.botonGuardarTipoBolsa.pack(side="left", padx=5)
+        self.botonGuardarTipoBolsa.config(state="disabled")
+        self.botonEliminarTipoBolsa = tk.Button(btn_frame, text="Eliminar", command=self.eliminar_tipo_bolsa, width=10)
+        self.botonEliminarTipoBolsa.pack(side="left", padx=5)
+        self.botonEliminarTipoBolsa.config(state="disabled")
 
     def llenar_clasificacion(self):
         try:
@@ -421,6 +451,7 @@ class TabAuxiliares(ttk.Frame):
         self.clasificacion_labelID.set('0')
         self.comboClasificaciones.set('')
         self.entrada_clasificacion.focus_set()
+        self.botonGuardarClasificacion.config(state="normal")
 
     def nuevo_caja(self):
         self.entrada_cajas.delete(0, tk.END)
@@ -429,7 +460,8 @@ class TabAuxiliares(ttk.Frame):
         self.entrada_cajas.insert(0, '')
         self.combo_tipo_caja_cajas.set('')
         self.entrada_cajas.focus_set()
-        
+        self.botonGuardarCaja.config(state="normal")
+
     def nuevo_bolsa(self):
         self.entrada_bolsa.delete(0, tk.END)
         self.bolsa_labelID.set('0')
@@ -437,24 +469,28 @@ class TabAuxiliares(ttk.Frame):
         self.entrada_bolsa.insert(0, '')
         self.combo_tipo_bolsa_bolsas.set('')
         self.entrada_bolsa.focus_set()
+        self.botonGuardarBolsa.config(state="normal")
 
     def nuevo_tipo_caja(self):
         self.entrada_tipo_caja.delete(0, tk.END)
         self.tipos_caja_labelID.set('0')
         self.combo_tipo_caja.set('')
         self.entrada_tipo_caja.focus_set()
+        self.botonGuardarTipoCaja.config(state="normal")
 
     def nuevo_tipo_bolsa(self):
         self.entrada_tipo_bolsa.delete(0, tk.END)
         self.tipos_bolsa_labelID.set('0')
         self.combo_tipo_bolsa.set('')
         self.entrada_tipo_bolsa.focus_set()
+        self.botonGuardarTipoBolsa.config(state="normal")
 
     def nuevo_seccion(self):
         self.entrada_seccion.delete(0, tk.END)
         self.seccion_labelID.set('0')
         self.combo_secciones.set('')
         self.entrada_seccion.focus_set()
+        self.botonGuardarSeccion.config(state="normal")
         
     def guardar_clasificacion(self):     
         selected = self.comboClasificaciones.get()
@@ -599,13 +635,17 @@ class TabAuxiliares(ttk.Frame):
         selected = self.combo_secciones.get()
         self.id_seccion_actual = self.ids_seccion.get(selected, 0)
         valor = self.entrada_seccion.get().strip()
+        self.botonGuardarSeccion.config(state="disabled")
+        self.botonEliminarSeccion.config(state="disabled")
+        self.botonNuevoSeccion.config(state="disabled")
         if valor == '':
-            messagebox.showwarning("Error", "Se debe rellenar la Sección")
+            messagebox.showwarning("Guardar Sección", "Se debe rellenar la Sección")
+            self.botonNuevoSeccion.config(state="normal")
+            self.botonGuardarSeccion.config(state="normal")
             return
         try:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()
-            # print(f"Guardar Sección: {valor}, ID actual: {self.id_seccion_actual}")
             if selected != '' and self.id_seccion_actual != 0:
                 cadena = f"UPDATE Secciones SET Seccion = '{valor}' WHERE SeccionID = {self.id_seccion_actual}"
             else:
@@ -616,9 +656,12 @@ class TabAuxiliares(ttk.Frame):
             self.llenar_secciones()
             self.combo_secciones.set(valor)
             self.entrada_seccion.focus_set()
-            messagebox.showinfo("Éxito", "Operación realizada correctamente")
+            messagebox.showinfo("Guardar Sección", "Operación realizada correctamente")
+
         except Exception as e:
-            messagebox.showerror("Error", f"No se pudo guardar:\n{e}")
+            messagebox.showerror("Guardar Sección", f"No se pudo guardar:\n{e}")
+            self.botonNuevoSeccion.config(state="normal")
+            self.botonGuardarSeccion.config(state="normal")
 
     def eliminar_clasificacion(self):
         selected = self.comboClasificaciones.get()
@@ -854,6 +897,13 @@ class TabAuxiliares(ttk.Frame):
         self.entrada_seccion.delete(0, tk.END)
         self.entrada_seccion.insert(0, selected)
         self.seccion_labelID.set(str(self.id_seccion_actual))
+        if selected != '':
+            self.botonGuardarSeccion.config(state="normal")
+            self.botonEliminarSeccion.config(state="normal")
+            return
+        else:
+            self.botonGuardarSeccion.config(state="disabled")
+            self.botonEliminarSeccion.config(state="disabled")
 
     def contar_registros_asociados(self, valor_id, campo, tabla):
         try:

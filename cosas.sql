@@ -55,7 +55,7 @@ and c.TipoCajaID = tc.TipoCajaID
 and b.TipoBolsaID = tb.TipoBolsaID 
 
 select * from detalles where ClasificacionID = 9
-*/
+
 
 
 select dt.DetalleID, dt.Descripcion, dt.Detalle, cj.Caja, bl.Bolsa, cl.Clasificacion, sc.seccion, dt.cantidad
@@ -64,6 +64,9 @@ where dt.CajaID = cj.CajaID and dt.BolsaID = bl.BolsaID and dt.ClasificacionID =
 and cj.SeccionID = sc.SeccionID and bl.SeccionID = sc.SeccionID and cl.SeccionID = sc.SeccionID
 order by sc.SeccionID, cj.CajaID, dt.DetalleID
 
+*/
+
+select * from detalles where DetalleID = 322
 
 
 

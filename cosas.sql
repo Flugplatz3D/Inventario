@@ -139,9 +139,9 @@ WHERE NOT EXISTS (SELECT 1 FROM cajas c WHERE c.SeccionID = secciones.SeccionID)
   
   
 SELECT 
-    (SELECT COUNT(*) FROM cajas) +
-    (SELECT COUNT(*) FROM bolsas) +
-    (SELECT COUNT(*) FROM clasificaciones) AS suma_total;
+    (SELECT COUNT(*) FROM cajas where SeccionID = 7) +
+    (SELECT COUNT(*) FROM bolsas where SeccionID = 7) +
+    (SELECT COUNT(*) FROM clasificaciones where SeccionID = 7) AS suma_total;
 	
 SELECT 
     s.SeccionID,

@@ -669,7 +669,8 @@ class TabAuxiliares(ttk.Frame):
             self.llenar_clasificacion()
             self.comboClasificaciones.set(valor)
             messagebox.showinfo("Éxito", "Operación realizada correctamente")
-            self.botonGuardarClasificacion.config(state="disabled")
+            self.botonGuardarClasificacion.config(state="normal")
+            self.botonEliminarClasificacion.config(state="normal")
             self.comboClasificaciones.config(state="readonly")
             self.botonNuevoClasificacion.config(text="Nuevo")
             self.botonNuevoClasificacion.config(state="normal")
@@ -800,7 +801,7 @@ class TabAuxiliares(ttk.Frame):
         self.id_clasificacion_actual = self.idsClasificacion.get(selected, 0)
         if selected == '':
             return
-        total = self.contar_registros_asociados(self.id_clasificacion_actual, "ClasificacionID", "detalles")
+        total = self.contar_registros_asociados_tablas(self.id_clasificacion_actual, "ClasificacionID", "detalles")
         if total != -1:
             try:
                 conn = sqlite3.connect(DB_NAME)
@@ -825,7 +826,7 @@ class TabAuxiliares(ttk.Frame):
         self.id_caja_actual = self.idsCaja.get(selected, 0)
         if selected == '':
             return
-        total = self.contar_registros_asociados(self.id_caja_actual, "CajaID", "detalles")
+        total = self.contar_registros_asociados_tablas(self.id_caja_actual, "CajaID", "detalles")
         if total != -1:
             try:    
                 conn = sqlite3.connect(DB_NAME)
@@ -851,7 +852,7 @@ class TabAuxiliares(ttk.Frame):
         self.id_bolsa_actual = self.idsBolsa.get(selected, 0)
         if selected == '':
             return
-        total = self.contar_registros_asociados(self.id_bolsa_actual, "BolsaID", "detalles")
+        total = self.contar_registros_asociados_tablas(self.id_bolsa_actual, "BolsaID", "detalles")
         if total != -1:
             try:
                 conn = sqlite3.connect(DB_NAME)
@@ -877,7 +878,7 @@ class TabAuxiliares(ttk.Frame):
         self.id_tipo_caja_actual = self.idsTipoCaja.get(selected, 0)
         if selected == '':
             return
-        total = self.contar_registros_asociados(self.id_tipo_caja_actual, "TipoCajaID", "cajas")
+        total = self.contar_registros_asociados_tablas(self.id_tipo_caja_actual, "TipoCajaID", "cajas")
         if total != -1:
             try:
                 conn = sqlite3.connect(DB_NAME)
@@ -903,7 +904,7 @@ class TabAuxiliares(ttk.Frame):
         self.id_tipo_bolsa_actual = self.idsTipoBolsa.get(selected, 0)
         if selected == '':
             return
-        total = self.contar_registros_asociados(self.id_tipo_bolsa_actual, "TipoBolsaID", "bolsas")
+        total = self.contar_registros_asociados_tablas(self.id_tipo_bolsa_actual, "TipoBolsaID", "bolsas")
         if total != -1:
             try:
                 conn = sqlite3.connect(DB_NAME)
@@ -925,11 +926,13 @@ class TabAuxiliares(ttk.Frame):
                 messagebox.showerror("Error", f"No se pudo eliminar:\n{e}")
 
     def eliminar_seccion(self):
+        # print(self.id_seccion_actual)
         selected = self.combo_secciones.get()
         self.id_seccion_actual = self.ids_seccion.get(selected, 0)
         if selected == '':
             return
-        total = self.contar_registros_asociados(self.id_seccion_actual, "SeccionID", "detalles")
+        total = self.contar_registros_asociados_secciones(self.id_seccion_actual)
+        # print(f"Total registros asociados a la sección {self.id_seccion_actual}: {total}")
         if total != -1:
             try:
                 conn = sqlite3.connect(DB_NAME)
@@ -948,13 +951,32 @@ class TabAuxiliares(ttk.Frame):
                 messagebox.showinfo("Éxito", "Registro eliminado correctamente")
             except Exception as e:
                 messagebox.showerror("Error", f"No se pudo eliminar:\n{e}")
-            
+
+    def contar_registros_asociados_secciones(self, valor_id):
+        try:
+            conn = sqlite3.connect(DB_NAME)
+            cursor = conn.cursor()
+            cadena = "SELECT"
+            cadena += f"(SELECT COUNT(*) FROM cajas where SeccionID = {valor_id}) +"
+            cadena += f"(SELECT COUNT(*) FROM bolsas where SeccionID = {valor_id}) +"
+            cadena += f"(SELECT COUNT(*) FROM clasificaciones where SeccionID = {valor_id}) AS suma_total;"
+            cursor.execute(cadena)
+            total = cursor.fetchone()[0]
+            conn.close()
+            return total
+        except Exception as e:
+            messagebox.showerror("Error", f"No se pudo contar los registros asociados:\n{e}")
+            return -1
+
     def combo_clasificaciones_click(self, event):
         selected = self.comboClasificaciones.get()
         self.id_clasificacion_actual = self.idsClasificacion.get(selected, 0)
         self.entrada_clasificacion.delete(0, tk.END)
         self.entrada_clasificacion.insert(0, selected)
         self.clasificacion_labelID.set(self.id_clasificacion_actual)
+        if selected != '':
+            self.botonEliminarClasificacion.config(state="normal")
+            self.botonGuardarClasificacion.config(state="normal")
 
     def combo_cajas_click(self, event):
         selected = self.combo_cajas.get()
@@ -975,6 +997,8 @@ class TabAuxiliares(ttk.Frame):
             tipo_caja = row[0]
             self.combo_tipo_caja_cajas.set(tipo_caja)
             conn.close()
+            self.botonGuardarCaja.config(state="normal")
+            self.botonEliminarCaja.config(state="normal")
         except Exception as e:
             messagebox.showerror("Error", f"No se pudo leer tipo caja:\n{e}")
 
@@ -997,6 +1021,8 @@ class TabAuxiliares(ttk.Frame):
             tipo_bolsa = row[0]
             self.combo_tipo_bolsa_bolsas.set(tipo_bolsa)
             conn.close()
+            self.botonGuardarBolsa.config(state="normal")
+            self.botonEliminarBolsa.config(state="normal")
 
         except Exception as e:
             messagebox.showerror("Error", f"No se pudo leer tipo bolsa:\n{e}")
@@ -1007,6 +1033,9 @@ class TabAuxiliares(ttk.Frame):
         self.entrada_tipo_caja.delete(0, tk.END)
         self.entrada_tipo_caja.insert(0, selected)
         self.tipos_caja_labelID.set(str(self.id_tipo_caja_actual))
+        if selected != '':
+            self.botonGuardarTipoCaja.config(state="normal")
+            self.botonEliminarTipoCaja.config(state="normal")
 
     def combo_tipo_caja_cajas_click(self, event):
         selected = self.combo_tipo_caja_cajas.get()
@@ -1018,6 +1047,9 @@ class TabAuxiliares(ttk.Frame):
         self.entrada_tipo_bolsa.delete(0, tk.END)
         self.entrada_tipo_bolsa.insert(0, selected)
         self.tipos_bolsa_labelID.set(str(self.id_tipo_bolsa_actual))
+        if selected != '':
+            self.botonGuardarTipoBolsa.config(state="normal")
+            self.botonEliminarTipoBolsa.config(state="normal")
 
     def combo_tipo_bolsa_bolsas_click(self, event):
         selected = self.combo_tipo_bolsa_bolsas.get()
@@ -1037,7 +1069,7 @@ class TabAuxiliares(ttk.Frame):
             self.botonGuardarSeccion.config(state="disabled")
             self.botonEliminarSeccion.config(state="disabled")
 
-    def contar_registros_asociados(self, valor_id, campo, tabla):
+    def contar_registros_asociados_tablas(self, valor_id, campo, tabla):
         try:
             conn = sqlite3.connect(DB_NAME)
             cursor = conn.cursor()

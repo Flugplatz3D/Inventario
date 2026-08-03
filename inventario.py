@@ -210,7 +210,7 @@ class InventarioApp(tk.Tk):
         self.tab_aux.nuevo_caja()
         self.tab_aux.nuevo_bolsa()
         self.tab_aux.nuevo_clasificacion()
-        self.tab_aux.nuevo_seccion()
+        self.tab_aux.nuevo_seccion(desde_boton=False)
         self.tab_aux.seccion_actual_labelID.set(self.seccion.get())
 
         ventana_modal.destroy()

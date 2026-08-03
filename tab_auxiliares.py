@@ -1,6 +1,6 @@
 
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import TRUE, ttk, messagebox
 import sqlite3
 
 DB_NAME = "inventario.db"
@@ -107,7 +107,7 @@ class TabAuxiliares(ttk.Frame):
 
         btn_frame = ttk.Frame(self.frm_secciones)
         btn_frame.grid(row=3, column=0, columnspan=2, pady=20)
-        self.botonNuevoSeccion = tk.Button(btn_frame, text="Nuevo", command=self.nuevo_seccion, width=10)
+        self.botonNuevoSeccion = tk.Button(btn_frame, text="Nuevo", command=lambda: self.nuevo_seccion(desde_boton=True), width=10)
         self.botonNuevoSeccion.pack(side="left", padx=5)
         self.botonGuardarSeccion = tk.Button(btn_frame, text="Guardar", command=self.guardar_seccion, width=10)
         self.botonGuardarSeccion.pack(side="left", padx=5)
@@ -148,7 +148,7 @@ class TabAuxiliares(ttk.Frame):
 
         btn_frame = ttk.Frame(self.frm_cajas)
         btn_frame.grid(row=5, column=0, columnspan=2, pady=10)
-        self.botonNuevoCaja = tk.Button(btn_frame, text="Nuevo", command=self.nuevo_caja, width=10)
+        self.botonNuevoCaja = tk.Button(btn_frame, text="Nuevo", command=lambda: self.nuevo_caja(desde_boton=True), width=10)
         self.botonNuevoCaja.pack(side="left", padx=5)
         self.botonGuardarCaja = tk.Button(btn_frame, text="Guardar", command=self.guardar_caja, width=10)
         self.botonGuardarCaja.pack(side="left", padx=5)
@@ -189,7 +189,7 @@ class TabAuxiliares(ttk.Frame):
 
         btn_frame = ttk.Frame(self.frm_bolsas)
         btn_frame.grid(row=5, column=0, columnspan=2, pady=10)
-        self.botonNuevoBolsa = tk.Button(btn_frame, text="Nuevo", command=self.nuevo_bolsa, width=10)
+        self.botonNuevoBolsa = tk.Button(btn_frame, text="Nuevo", command=lambda: self.nuevo_bolsa(desde_boton=True), width=10)
         self.botonNuevoBolsa.pack(side="left", padx=5)
         self.botonGuardarBolsa = tk.Button(btn_frame, text="Guardar", command=self.guardar_bolsa, width=10)
         self.botonGuardarBolsa.pack(side="left", padx=5)
@@ -223,7 +223,7 @@ class TabAuxiliares(ttk.Frame):
 
         btn_frame = ttk.Frame(self.frm_datos)
         btn_frame.grid(row=4, column=0, columnspan=2, pady=20)
-        self.botonNuevoClasificacion = tk.Button(btn_frame, text="Nuevo", command=self.nuevo_clasificacion, width=10)
+        self.botonNuevoClasificacion = tk.Button(btn_frame, text="Nuevo", command=lambda: self.nuevo_clasificacion(desde_boton=True), width=10)
         self.botonNuevoClasificacion.pack(side="left", padx=5)
         self.botonGuardarClasificacion = tk.Button(btn_frame, text="Guardar", command=self.guardar_clasificacion, width=10)
         self.botonGuardarClasificacion.pack(side="left", padx=5)
@@ -255,7 +255,7 @@ class TabAuxiliares(ttk.Frame):
 
         btn_frame = ttk.Frame(self.frm_tipos_caja)
         btn_frame.grid(row=3, column=0, columnspan=2, pady=20)
-        self.botonNuevoTipoCaja = tk.Button(btn_frame, text="Nuevo", command=self.nuevo_tipo_caja, width=10)
+        self.botonNuevoTipoCaja = tk.Button(btn_frame, text="Nuevo", command=lambda: self.nuevo_tipo_caja(desde_boton=True), width=10)
         self.botonNuevoTipoCaja.pack(side="left", padx=5)
         self.botonGuardarTipoCaja = tk.Button(btn_frame, text="Guardar", command=self.guardar_tipo_caja, width=10)
         self.botonGuardarTipoCaja.pack(side="left", padx=5)
@@ -286,7 +286,7 @@ class TabAuxiliares(ttk.Frame):
 
         btn_frame = ttk.Frame(self.frm_tipos_bolsa)
         btn_frame.grid(row=3, column=0, columnspan=2, pady=20)
-        self.botonNuevoTipoBolsa = tk.Button(btn_frame, text="Nuevo", command=self.nuevo_tipo_bolsa, width=10)
+        self.botonNuevoTipoBolsa = tk.Button(btn_frame, text="Nuevo", command=lambda: self.nuevo_tipo_bolsa(desde_boton=True), width=10)
         self.botonNuevoTipoBolsa.pack(side="left", padx=5)
         self.botonGuardarTipoBolsa = tk.Button(btn_frame, text="Guardar", command=self.guardar_tipo_bolsa, width=10)
         self.botonGuardarTipoBolsa.pack(side="left", padx=5)
@@ -446,58 +446,215 @@ class TabAuxiliares(ttk.Frame):
         except Exception as e:
             messagebox.showerror("Error", f"Error cargando Secciones:\n{e}")
 
-    def nuevo_clasificacion(self):
-        self.entrada_clasificacion.delete(0, tk.END)
-        self.clasificacion_labelID.set('0')
-        self.comboClasificaciones.set('')
-        self.entrada_clasificacion.focus_set()
-        self.botonGuardarClasificacion.config(state="normal")
+    def nuevo_seccion(self, desde_boton=False):
+        def limpiar_campos():
+            self.entrada_seccion.delete(0, tk.END)
+            self.seccion_labelID.set('0')
+            self.combo_secciones.set('')
+            self.entrada_seccion.focus_set()
+            self.botonGuardarSeccion.config(state="disabled")
+            self.botonEliminarSeccion.config(state="disabled")
+            self.combo_secciones.config(state="readonly")
+            self.botonNuevoSeccion.config(text="Nuevo")
 
-    def nuevo_caja(self):
-        self.entrada_cajas.delete(0, tk.END)
-        self.caja_labelID.set('0')
-        self.combo_cajas.set('')
-        self.entrada_cajas.insert(0, '')
-        self.combo_tipo_caja_cajas.set('')
-        self.entrada_cajas.focus_set()
-        self.botonGuardarCaja.config(state="normal")
+        if desde_boton:
+            if self.botonNuevoSeccion.cget("text") == "Cancelar":
+                limpiar_campos()
+                return
+            else:
+                self.entrada_seccion.delete(0, tk.END)
+                self.seccion_labelID.set('0')
+                self.combo_secciones.set('')
+                self.entrada_seccion.focus_set()
+                self.botonGuardarSeccion.config(state="normal")
+                self.combo_secciones.config(state="disabled")
+                self.botonNuevoSeccion.config(text="Cancelar")
+                self.botonEliminarSeccion.config(state="disabled")
+                self.entrada_seccion.focus_set()
+        else:
+            limpiar_campos()
 
-    def nuevo_bolsa(self):
-        self.entrada_bolsa.delete(0, tk.END)
-        self.bolsa_labelID.set('0')
-        self.combo_bolsas.set('')
-        self.entrada_bolsa.insert(0, '')
-        self.combo_tipo_bolsa_bolsas.set('')
-        self.entrada_bolsa.focus_set()
-        self.botonGuardarBolsa.config(state="normal")
+    def nuevo_caja(self, desde_boton=False):
 
-    def nuevo_tipo_caja(self):
-        self.entrada_tipo_caja.delete(0, tk.END)
-        self.tipos_caja_labelID.set('0')
-        self.combo_tipo_caja.set('')
-        self.entrada_tipo_caja.focus_set()
-        self.botonGuardarTipoCaja.config(state="normal")
+        def limpiar_campos():
+            self.entrada_cajas.delete(0, tk.END)
+            self.caja_labelID.set('0')
+            self.combo_cajas.set('')
+            self.combo_tipo_caja_cajas.set('')
+            self.entrada_cajas.focus_set()
+            self.botonGuardarCaja.config(state="disabled")
+            self.combo_cajas.config(state="readonly")
+            self.botonNuevoCaja.config(text="Nuevo")
 
-    def nuevo_tipo_bolsa(self):
-        self.entrada_tipo_bolsa.delete(0, tk.END)
-        self.tipos_bolsa_labelID.set('0')
-        self.combo_tipo_bolsa.set('')
-        self.entrada_tipo_bolsa.focus_set()
-        self.botonGuardarTipoBolsa.config(state="normal")
+        if desde_boton:
+            if self.botonNuevoCaja.cget("text") == "Cancelar":
+                limpiar_campos()
+                return
+            else:
+                self.botonGuardarCaja.config(state="normal")
+                self.combo_cajas.config(state="disabled")
+                self.botonNuevoCaja.config(text="Cancelar")
+                self.entrada_cajas.focus_set()
+        else:
+            limpiar_campos()
 
-    def nuevo_seccion(self):
-        self.entrada_seccion.delete(0, tk.END)
-        self.seccion_labelID.set('0')
-        self.combo_secciones.set('')
-        self.entrada_seccion.focus_set()
-        self.botonGuardarSeccion.config(state="normal")
+    def nuevo_bolsa(self, desde_boton=False):
+        def limpiar_campos():
+            self.entrada_bolsa.delete(0, tk.END)
+            self.bolsa_labelID.set('0')
+            self.combo_bolsas.set('')
+            self.combo_tipo_bolsa_bolsas.set('')
+            self.entrada_bolsa.focus_set()
+            self.botonGuardarBolsa.config(state="disabled")
+            self.combo_bolsas.config(state="readonly")
+            self.botonNuevoBolsa.config(text="Nuevo")
+
+        if desde_boton:
+            if self.botonNuevoBolsa.cget("text") == "Cancelar":
+                limpiar_campos()
+                return
+            else:
+                self.botonGuardarBolsa.config(state="normal")
+                self.combo_bolsas.config(state="disabled")
+                self.botonNuevoBolsa.config(text="Cancelar")
+                self.entrada_bolsa.focus_set()
+        else:
+            limpiar_campos()
+
+    def nuevo_clasificacion(self, desde_boton=False):
+        def limpiar_campos():
+            self.entrada_clasificacion.delete(0, tk.END)
+            self.clasificacion_labelID.set('0')
+            self.comboClasificaciones.set('')
+            self.entrada_clasificacion.focus_set()
+            self.botonGuardarClasificacion.config(state="disabled")
+            self.comboClasificaciones.config(state="readonly")
+            self.botonNuevoClasificacion.config(text="Nuevo")
+
+        if desde_boton:
+            if self.botonNuevoClasificacion.cget("text") == "Cancelar":
+                limpiar_campos()
+                return
+            else:
+                self.botonGuardarClasificacion.config(state="normal")
+                self.comboClasificaciones.config(state="disabled")
+                self.botonNuevoClasificacion.config(text="Cancelar")
+                self.entrada_clasificacion.focus_set()
+        else:
+            limpiar_campos()
+
+    def nuevo_tipo_caja(self, desde_boton=False):
+        def limpiar_campos():
+            self.entrada_tipo_caja.delete(0, tk.END)
+            self.tipos_caja_labelID.set('0')
+            self.combo_tipo_caja.set('')
+            self.entrada_tipo_caja.focus_set()
+            self.botonGuardarTipoCaja.config(state="disabled")
+            self.combo_tipo_caja.config(state="readonly")
+            self.botonNuevoTipoCaja.config(text="Nuevo")
+
+        if desde_boton:
+            if self.botonNuevoTipoCaja.cget("text") == "Cancelar":
+                limpiar_campos()
+                return
+            else:
+                self.botonGuardarTipoCaja.config(state="normal")
+                self.combo_tipo_caja.config(state="disabled")
+                self.botonNuevoTipoCaja.config(text="Cancelar")
+                self.entrada_tipo_caja.focus_set()
+        else:
+            limpiar_campos()
+
+    def nuevo_tipo_bolsa(self, desde_boton=False):
+        def limpiar_campos():
+            self.entrada_tipo_bolsa.delete(0, tk.END)
+            self.tipos_bolsa_labelID.set('0')
+            self.combo_tipo_bolsa.set('')
+            self.entrada_tipo_bolsa.focus_set()
+            self.botonGuardarTipoBolsa.config(state="disabled")
+            self.combo_tipo_bolsa.config(state="readonly")
+            self.botonNuevoTipoBolsa.config(text="Nuevo")
+
+        if desde_boton:
+            if self.botonNuevoTipoBolsa.cget("text") == "Cancelar":
+                limpiar_campos()
+                return
+            else:
+                self.botonGuardarTipoBolsa.config(state="normal")
+                self.combo_tipo_bolsa.config(state="disabled")
+                self.botonNuevoTipoBolsa.config(text="Cancelar")
+                self.entrada_tipo_bolsa.focus_set()
+        else:
+            limpiar_campos()
+
+    def guardar_seccion(self):
+        selected = self.combo_secciones.get()
+        self.id_seccion_actual = self.ids_seccion.get(selected, 0)
+        valor = self.entrada_seccion.get().strip()
+        self.botonGuardarSeccion.config(state="disabled")
+        self.botonEliminarSeccion.config(state="disabled")
+        self.botonNuevoSeccion.config(state="disabled")
+        if valor == '':
+            messagebox.showwarning("Guardar Sección", "Se debe rellenar la Sección")
+            self.botonNuevoSeccion.config(state="normal")
+            self.botonGuardarSeccion.config(state="normal")
+            return
+        try:
+            conn = sqlite3.connect(DB_NAME)
+            cursor = conn.cursor()
+            if selected != '' and self.id_seccion_actual != 0:
+                cadena = f"UPDATE Secciones SET Seccion = '{valor}' WHERE SeccionID = {self.id_seccion_actual}"
+            else:
+                cadena = f"INSERT INTO Secciones (Seccion) VALUES ('{valor}')"
+            cursor.execute(cadena)
+            conn.commit()
+            conn.close()
+            messagebox.showinfo("Guardar Sección", "Operación realizada correctamente") 
+            self.llenar_secciones()
+            self.entrada_seccion.focus_set()
+            self.botonGuardarSeccion.config(state="active")
+            self.botonEliminarSeccion.config(state="active")
+            self.botonNuevoSeccion.config(state="active")
+            self.combo_secciones.config(state="readonly")
+            self.botonNuevoSeccion.config(text="Nuevo")
+            self.botonNuevoSeccion.config(state="normal")
+            identificativo = self.leer_id("Secciones", "SeccionID", "Seccion", valor)
+            self.id_seccion_actual = identificativo
+            self.seccion_labelID.set(str(identificativo))
+            self.combo_secciones.set(valor)
+
+        except Exception as e:
+            messagebox.showerror("Guardar Sección", f"No se pudo guardar:\n{e}")
+            self.botonNuevoSeccion.config(state="normal")
+            self.botonGuardarSeccion.config(state="normal")
+
+    def leer_id(self, tabla, nombre_columna_id, nombre_columna_valor, valor):
+        try:
+            conn = sqlite3.connect(DB_NAME)
+            cursor = conn.cursor()
+            cadena = f"SELECT {nombre_columna_id} FROM {tabla} WHERE {nombre_columna_valor} = ?"
+            cursor.execute(cadena, (valor,))
+            row = cursor.fetchone()
+            conn.close()
+            if row:
+                return row[0]
+            else:
+                return None
+        except Exception as e:
+            messagebox.showerror("Error", f"No se pudo leer el ID:\n{e}")
+            return None
         
     def guardar_clasificacion(self):     
         selected = self.comboClasificaciones.get()
         self.id_clasificacion_actual = self.idsClasificacion.get(selected, 0)
         valor = self.entrada_clasificacion.get().strip()
+        self.botonGuardarClasificacion.config(state="disabled")
+        self.botonEliminarClasificacion.config(state="disabled")
+        self.botonNuevoClasificacion.config(state="disabled")
         if valor == '':
             messagebox.showwarning("Error", "Se debe rellenar la Clasificación")
+            self.botonNuevoClasificacion.config(state="normal")
+            self.botonGuardarClasificacion.config(state="normal")
             return
         try:
             conn = sqlite3.connect(DB_NAME)
@@ -511,10 +668,17 @@ class TabAuxiliares(ttk.Frame):
             conn.close()
             self.llenar_clasificacion()
             self.comboClasificaciones.set(valor)
-            self.entrada_clasificacion.focus_set()
             messagebox.showinfo("Éxito", "Operación realizada correctamente")
+            self.botonGuardarClasificacion.config(state="disabled")
+            self.comboClasificaciones.config(state="readonly")
+            self.botonNuevoClasificacion.config(text="Nuevo")
+            self.botonNuevoClasificacion.config(state="normal")
+            self.entrada_clasificacion.focus_set()
+                                                
         except Exception as e:
             messagebox.showerror("Error", f"No se pudo guardar:\n{e}")
+            self.botonNuevoClasificacion.config(state="normal")
+            self.botonGuardarClasificacion.config(state="normal")
 
     def guardar_caja(self):
         selected = self.combo_cajas.get()
@@ -630,38 +794,6 @@ class TabAuxiliares(ttk.Frame):
             messagebox.showinfo("Éxito", "Operación realizada correctamente")
         except Exception as e:
             messagebox.showerror("Error", f"No se pudo guardar:\n{e}")
-
-    def guardar_seccion(self):
-        selected = self.combo_secciones.get()
-        self.id_seccion_actual = self.ids_seccion.get(selected, 0)
-        valor = self.entrada_seccion.get().strip()
-        self.botonGuardarSeccion.config(state="disabled")
-        self.botonEliminarSeccion.config(state="disabled")
-        self.botonNuevoSeccion.config(state="disabled")
-        if valor == '':
-            messagebox.showwarning("Guardar Sección", "Se debe rellenar la Sección")
-            self.botonNuevoSeccion.config(state="normal")
-            self.botonGuardarSeccion.config(state="normal")
-            return
-        try:
-            conn = sqlite3.connect(DB_NAME)
-            cursor = conn.cursor()
-            if selected != '' and self.id_seccion_actual != 0:
-                cadena = f"UPDATE Secciones SET Seccion = '{valor}' WHERE SeccionID = {self.id_seccion_actual}"
-            else:
-                cadena = f"INSERT INTO Secciones (Seccion) VALUES ('{valor}')"
-            cursor.execute(cadena)
-            conn.commit()
-            conn.close()
-            self.llenar_secciones()
-            self.combo_secciones.set(valor)
-            self.entrada_seccion.focus_set()
-            messagebox.showinfo("Guardar Sección", "Operación realizada correctamente")
-
-        except Exception as e:
-            messagebox.showerror("Guardar Sección", f"No se pudo guardar:\n{e}")
-            self.botonNuevoSeccion.config(state="normal")
-            self.botonGuardarSeccion.config(state="normal")
 
     def eliminar_clasificacion(self):
         selected = self.comboClasificaciones.get()

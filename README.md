@@ -1,6 +1,6 @@
 Aplicación Inventario Python/SQLite3/TTK-TKinter
 
-Esta hecha para WINDOWS!!! En Linux funciona sin problema, pero hay que comentar la linea 14 de "inventario.py" y en "tab_detalle.py" hay que recolocar algunos componentes ya que esta hecha con "place()" y no se comporta exactamente igual que en Windows.
+Esta hecha para WINDOWS!!! En Linux funciona sin problema, pero hay que comentar la linea 14 de "inventario.py" y en "tab_detalle.py" hay que recolocar algunos componentes ya que el ttk no se comporta exactamente igual que en Windows.
 
 Para compilar en Windows:
 

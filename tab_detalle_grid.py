@@ -8,6 +8,7 @@ class TabDetalle(ttk.Frame):
     def __init__(self, parent, app):
         super().__init__(parent)
         self.app = app
+        # print(f"Literal: {app.seccion.get()} | ID: {app.id_seccion_actual}") 
        
         # Variables
         self.intOrden = tk.IntVar(value=1)
@@ -35,6 +36,116 @@ class TabDetalle(ttk.Frame):
 
         # Dato de prueba
         # self.entrada1.insert(0, "ESP32")
+
+    # def setup_ui(self):
+    #     tk.Label(self, text="Descripción1").place(x=10, y=15)
+    #     self.entrada1 = tk.Entry(self, width=22)
+    #     self.entrada1.place(x=95, y=15)
+
+    #     tk.Label(self, text="Descripción2").place(x=300, y=15)
+    #     self.entrada2 = tk.Entry(self, width=22)
+    #     self.entrada2.place(x=385, y=15)
+
+    #     tk.Label(self, text="Detalle").place(x=580, y=15)
+    #     self.entrada3 = tk.Entry(self, width=22)
+    #     self.entrada3.place(x=665, y=15)
+
+    #     tk.Label(self, text="Cajas").place(x=10, y=45)
+    #     tk.Label(self, text="Bolsas").place(x=10, y=75)
+    #     tk.Label(self, text="Clasificación").place(x=10, y=105)
+
+    #     # Combos
+    #     self.comboCajas = ttk.Combobox(self, state="readonly", width=27)
+    #     self.comboCajas.place(x=95, y=45)
+        
+    #     self.comboBolsas = ttk.Combobox(self, state="readonly", width=27)
+    #     self.comboBolsas.place(x=95, y=75)
+
+    #     self.comboClasificaciones = ttk.Combobox(self, state="readonly", width=27)
+    #     self.comboClasificaciones.place(x=95, y=105)
+
+    #     self.comboCajas.bind("<<ComboboxSelected>>", self.comboCajasClick)
+    #     self.comboBolsas.bind("<<ComboboxSelected>>", self.comboBolsasClick)
+    #     self.comboClasificaciones.bind("<<ComboboxSelected>>", self.comboClasificacionClick)
+
+    #     # Botones de búsqueda
+    #     tk.Button(self, text="Buscar", command=self.buscar, width=11).place(x=1000, y=10)
+    #     tk.Button(self, text="Limpiar", command=self.limpiar, width=11).place(x=1100, y=10)
+
+    #     self.botonDetalle = tk.Button(self, text="Detalle", 
+    #                                 command=self.mostrar_editar_detalle_modal,
+    #                                 width=10, state=tk.DISABLED)
+    #     self.botonDetalle.place(x=10, y=510)
+
+    #     self.botonEliminar = tk.Button(self, text="Eliminar", command=self.eliminar_seleccionado, 
+    #               width=10, state=tk.DISABLED)
+    #     self.botonEliminar.place(x=100, y=510)
+        
+    #     self.botonNuevo = tk.Button(self, text="Nuevo", command=self.nuevo_registro, 
+    #                                 width=10, state=tk.ACTIVE)
+    #     self.botonNuevo.place(x=190, y=510)
+
+    #     self.labelRecuento = tk.Label(self, text="", textvariable=self.texto_label_recuento, font=("Segoe UI", 9))
+    #     self.labelRecuento.place(x=880,y=510)
+
+    #     # Radiobuttons para orden
+    #     rb1_1 = ttk.Radiobutton(self, text="Descripción", variable=self.intOrden, 
+    #                     value=1, command=self.buscar).place(x=700, y=70)
+    #     rb1_2 = ttk.Radiobutton(self, text="Clasificación", variable=self.intOrden, 
+    #                     value=2, command=self.buscar).place(x=800, y=70)
+    #     rb1_3 = ttk.Radiobutton(self, text="Detalle", variable=self.intOrden, 
+    #                     value=3, command=self.buscar).place(x=900, y=70)
+    #     rb1_4 = ttk.Radiobutton(self, text="Caja", variable=self.intOrden, 
+    #                     value=4, command=self.buscar).place(x=980, y=70)
+    #     rb1_5 = ttk.Radiobutton(self, text="Bolsa", variable=self.intOrden, 
+    #                     value=5, command=self.buscar).place(x=1050, y=70)
+    #     rb1_6 = ttk.Radiobutton(self, text="ID", variable=self.intOrden, 
+    #                     value=6, command=self.buscar).place(x=1130, y=70)
+    #     # Radiobuttons para sentido
+    #     rb2_1 = ttk.Radiobutton(self, text="ASC", variable=self.intSentido, 
+    #                     value=1, command=self.buscar).place(x=700, y=110)
+    #     rb2_2 = ttk.Radiobutton(self, text="DESC", variable=self.intSentido, 
+    #                     value=2, command=self.buscar).place(x=760, y=110)
+
+    #     # ==================== TREEVIEW ====================
+    #     self.tree = ttk.Treeview(self, columns=("Descripcion", "Clasificacion", "Detalle", 
+    #                                             "Caja", "TipoCaja", "Bolsa", "TipoBolsa", "Cantidad", "id"), 
+    #                              show="headings", height=15, selectmode="extended")
+
+    #     columnas = {
+    #         "Descripcion":   ("Descripción", 215),
+    #         "Clasificacion": ("Clasificación", 145),
+    #         "Detalle":       ("Detalle", 220),
+    #         "Caja":          ("Caja", 135),
+    #         "TipoCaja":      ("TipoCaja", 128),
+    #         "Bolsa":         ("Bolsa", 130),
+    #         "TipoBolsa":     ("TipoBolsa", 116),
+    #         "Cantidad":      ("Cantidad", 56),
+    #         "id":            ("ID", 40)
+    #     }
+
+    #     for col, (texto, ancho) in columnas.items():
+    #         self.tree.heading(col, text=texto, anchor=tk.W,
+    #                           command=lambda c=col: self.ordenar_por_columna(c))
+    #         self.tree.column(col, width=ancho, anchor=tk.W, stretch=False)
+
+    #     self.tree.column('#0', width=0, stretch=False)
+    #     self.tree.place(x=10, y=160, width=1188, height=328)
+
+    #     # Scrollbars
+    #     scroll_y = ttk.Scrollbar(self, orient=tk.VERTICAL, command=self.tree.yview)
+    #     scroll_x = ttk.Scrollbar(self, orient=tk.HORIZONTAL, command=self.tree.xview)
+    #     self.tree.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
+
+    #     scroll_x.place(x=10, y=490, width=1188)
+    #     scroll_y.place(x=1200, y=160, height=328)
+
+    #     # Bindings
+    #     self.tree.bind("<Double-1>", self.on_double_click)
+    #     self.tree.bind("<Button-3>", self.on_right_click)
+
+    #     self.style = ttk.Style()
+    #     self.style.configure("Treeview.Heading", font=("Segoe UI", 9, "bold"))
 
     def setup_ui(self):
         # Configurar columnas

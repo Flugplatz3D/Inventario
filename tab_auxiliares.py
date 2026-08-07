@@ -491,6 +491,11 @@ class TabAuxiliares(ttk.Frame):
                 limpiar_campos()
                 return
             else:
+                self.entrada_cajas.delete(0, tk.END)
+                self.caja_labelID.set('0')
+                self.combo_tipo_caja_cajas.set('')
+                self.combo_cajas.set('')
+                self.entrada_cajas.focus_set()
                 self.botonGuardarCaja.config(state="normal")
                 self.combo_cajas.config(state="disabled")
                 self.botonNuevoCaja.config(text="Cancelar")
@@ -514,6 +519,11 @@ class TabAuxiliares(ttk.Frame):
                 limpiar_campos()
                 return
             else:
+                self.entrada_bolsa.delete(0, tk.END)
+                self.bolsa_labelID.set('0')
+                self.combo_bolsas.set('')
+                self.combo_tipo_bolsa_bolsas.set('')
+                self.entrada_bolsa.focus_set()
                 self.botonGuardarBolsa.config(state="normal")
                 self.combo_bolsas.config(state="disabled")
                 self.botonNuevoBolsa.config(text="Cancelar")
@@ -536,6 +546,10 @@ class TabAuxiliares(ttk.Frame):
                 limpiar_campos()
                 return
             else:
+                self.entrada_clasificacion.delete(0, tk.END)
+                self.clasificacion_labelID.set('0')
+                self.comboClasificaciones.set('')
+                self.entrada_clasificacion.focus_set()
                 self.botonGuardarClasificacion.config(state="normal")
                 self.comboClasificaciones.config(state="disabled")
                 self.botonNuevoClasificacion.config(text="Cancelar")
@@ -558,6 +572,10 @@ class TabAuxiliares(ttk.Frame):
                 limpiar_campos()
                 return
             else:
+                self.entrada_tipo_caja.delete(0, tk.END)
+                self.tipos_caja_labelID.set('0')
+                self.combo_tipo_caja.set('')
+                self.entrada_tipo_caja.focus_set()
                 self.botonGuardarTipoCaja.config(state="normal")
                 self.combo_tipo_caja.config(state="disabled")
                 self.botonNuevoTipoCaja.config(text="Cancelar")
@@ -580,6 +598,10 @@ class TabAuxiliares(ttk.Frame):
                 limpiar_campos()
                 return
             else:
+                self.entrada_tipo_bolsa.delete(0, tk.END)
+                self.tipos_bolsa_labelID.set('0')
+                self.combo_tipo_bolsa.set('')
+                self.entrada_tipo_bolsa.focus_set()
                 self.botonGuardarTipoBolsa.config(state="normal")
                 self.combo_tipo_bolsa.config(state="disabled")
                 self.botonNuevoTipoBolsa.config(text="Cancelar")

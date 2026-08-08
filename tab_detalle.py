@@ -36,7 +36,146 @@ class TabDetalle(ttk.Frame):
         # Dato de prueba
         # self.entrada1.insert(0, "ESP32")
 
+    # def setup_ui(self):
+    #     # Configurar columnas
+    #     self.columnconfigure(0, weight=0)
+    #     self.columnconfigure(1, weight=0)
+    #     self.columnconfigure(2, weight=0)
+    #     self.columnconfigure(3, weight=0)
+    #     self.columnconfigure(4, weight=0)
+    #     self.columnconfigure(5, weight=0)
+    #     self.columnconfigure(6, weight=0)
+    #     self.columnconfigure(7, weight=0)
+    #     self.columnconfigure(8, weight=0)
+    #     self.columnconfigure(9, weight=0)
+    #     self.columnconfigure(10, weight=1)   # espacio residual a la derecha
+    #     # self.columnconfigure(9, weight=1)   # espacio residual a la derecha
+
+    #     # ==================== FILA 0: Búsquedas ====================
+    #     tk.Label(self, text="Descripción1").grid(row=0, column=0, sticky="e", padx=(10,4), pady=8)
+    #     self.entrada1 = tk.Entry(self, width=22)
+    #     self.entrada1.grid(row=0, column=1, sticky="w", padx=(0,15), pady=8)
+
+    #     tk.Label(self, text="Descripción2").grid(row=0, column=2, sticky="e", padx=(0,4), pady=8)
+    #     self.entrada2 = tk.Entry(self, width=22)
+    #     self.entrada2.grid(row=0, column=3, sticky="w", padx=(0,15), pady=8)
+
+    #     tk.Label(self, text="Detalle").grid(row=0, column=4, sticky="e", padx=(0,4), pady=8)
+    #     self.entrada3 = tk.Entry(self, width=22)
+    #     self.entrada3.grid(row=0, column=5, sticky="w", padx=(0,20), pady=8)
+
+    #     tk.Button(self, text="Buscar", command=self.buscar, width=11).grid(row=0, column=7, padx=4, pady=8)
+    #     tk.Button(self, text="Limpiar", command=self.limpiar, width=11).grid(row=0, column=8, padx=4, pady=8)
+
+    #     # ==================== FILA 1-3: Combos ====================
+    #     tk.Label(self, text="Cajas").grid(row=1, column=0, sticky="e", padx=(10,4), pady=4)
+    #     self.comboCajas = ttk.Combobox(self, state="readonly", width=27)
+    #     self.comboCajas.grid(row=1, column=1, sticky="w", padx=(0,10), pady=4)
+
+    #     tk.Label(self, text="Bolsas").grid(row=2, column=0, sticky="e", padx=(10,4), pady=4)
+    #     self.comboBolsas = ttk.Combobox(self, state="readonly", width=27)
+    #     self.comboBolsas.grid(row=2, column=1, sticky="w", padx=(0,10), pady=4)
+
+    #     tk.Label(self, text="Clasificación").grid(row=3, column=0, sticky="e", padx=(10,4), pady=4)
+    #     self.comboClasificaciones = ttk.Combobox(self, state="readonly", width=27)
+    #     self.comboClasificaciones.grid(row=3, column=1, sticky="w", padx=(0,10), pady=4)
+
+    #     self.comboCajas.bind("<<ComboboxSelected>>", self.comboCajasClick)
+    #     self.comboBolsas.bind("<<ComboboxSelected>>", self.comboBolsasClick)
+    #     self.comboClasificaciones.bind("<<ComboboxSelected>>", self.comboClasificacionClick)
+
+    #     # Radiobuttons de orden (más a la izquierda)
+    #     ttk.Radiobutton(self, text="Descripción", variable=self.intOrden, value=1, command=self.buscar).grid(row=1, column=3, sticky="w", padx=2)
+    #     ttk.Radiobutton(self, text="Clasificación", variable=self.intOrden, value=2, command=self.buscar).grid(row=1, column=4, sticky="w", padx=2)
+    #     ttk.Radiobutton(self, text="Detalle", variable=self.intOrden, value=3, command=self.buscar).grid(row=1, column=5, sticky="w", padx=2)
+    #     ttk.Radiobutton(self, text="Caja", variable=self.intOrden, value=4, command=self.buscar).grid(row=1, column=6, sticky="w", padx=2)
+    #     ttk.Radiobutton(self, text="Bolsa", variable=self.intOrden, value=5, command=self.buscar).grid(row=1, column=7, sticky="w", padx=2)
+    #     ttk.Radiobutton(self, text="ID", variable=self.intOrden, value=6, command=self.buscar).grid(row=1, column=8, sticky="w", padx=2)
+
+    #     # Radiobuttons de sentido
+    #     ttk.Radiobutton(self, text="ASC", variable=self.intSentido, value=1, command=self.buscar).grid(row=2, column=3, sticky="w", padx=2)
+    #     ttk.Radiobutton(self, text="DESC", variable=self.intSentido, value=2, command=self.buscar).grid(row=2, column=4, sticky="w", padx=2)
+
+    #     # ==================== TREEVIEW ====================
+    #     tree_frame = ttk.Frame(self)
+    #     tree_frame.grid(row=4, column=0, columnspan=10, sticky="nsew", padx=10, pady=(10,0))
+    #     tree_frame.columnconfigure(0, weight=1)
+    #     tree_frame.rowconfigure(0, weight=1)
+
+    #     self.tree = ttk.Treeview(tree_frame, columns=("Descripcion", "Clasificacion", "Detalle", 
+    #                                             "Caja", "TipoCaja", "Bolsa", "TipoBolsa", "Cantidad", "id"), 
+    #                             show="headings", height=15, selectmode="extended")
+
+    #     columnas = {
+    #         "Descripcion":   ("Descripción", 215),
+    #         "Clasificacion": ("Clasificación", 145),
+    #         "Detalle":       ("Detalle", 220),
+    #         "Caja":          ("Caja", 135),
+    #         "TipoCaja":      ("TipoCaja", 128),
+    #         "Bolsa":         ("Bolsa", 130),
+    #         "TipoBolsa":     ("TipoBolsa", 116),
+    #         "Cantidad":      ("Cantidad", 56),
+    #         "id":            ("ID", 40)
+    #     }
+
+    #     for col, (texto, ancho) in columnas.items():
+    #         self.tree.heading(col, text=texto, anchor=tk.W,
+    #                         command=lambda c=col: self.ordenar_por_columna(c))
+    #         self.tree.column(col, width=ancho, anchor=tk.W, stretch=False)
+
+    #     self.tree.column('#0', width=0, stretch=False)
+    #     self.tree.grid(row=0, column=0, sticky="nsew")
+
+    #     scroll_y = ttk.Scrollbar(tree_frame, orient=tk.VERTICAL, command=self.tree.yview)
+    #     scroll_x = ttk.Scrollbar(tree_frame, orient=tk.HORIZONTAL, command=self.tree.xview)
+    #     self.tree.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
+
+    #     scroll_y.grid(row=0, column=1, sticky="ns")
+    #     scroll_x.grid(row=1, column=0, sticky="ew")
+
+    #     # ==================== BOTONES INFERIORES ====================
+    #     btn_frame = ttk.Frame(self)
+    #     btn_frame.grid(row=5, column=0, columnspan=10, sticky="ew", padx=10, pady=10)
+
+    #     self.botonDetalle = tk.Button(btn_frame, text="Detalle", 
+    #                                 command=self.mostrar_editar_detalle_modal,
+    #                                 width=10, state=tk.DISABLED)
+    #     self.botonDetalle.pack(side="left", padx=(0,8))
+
+    #     self.botonEliminar = tk.Button(btn_frame, text="Eliminar", 
+    #                                 command=self.eliminar_seleccionado, 
+    #                                 width=10, state=tk.DISABLED)
+    #     self.botonEliminar.pack(side="left", padx=8)
+        
+    #     self.botonNuevo = tk.Button(btn_frame, text="Nuevo", 
+    #                                 command=self.nuevo_registro, width=10)
+    #     self.botonNuevo.pack(side="left", padx=8)
+
+    #     self.labelRecuento = tk.Label(btn_frame, textvariable=self.texto_label_recuento, font=("Segoe UI", 9))
+    #     self.labelRecuento.pack(side="right", padx=10)
+
+    #     # Bindings
+    #     self.tree.bind("<Double-1>", self.on_double_click)
+    #     self.tree.bind("<Button-3>", self.on_right_click)
+
+    #     self.style = ttk.Style()
+    #     self.style.configure("Treeview.Heading", font=("Segoe UI", 9, "bold"))
+
+    #     self.rowconfigure(4, weight=1)
+
     def setup_ui(self):
+        # # ==================== COLORES DE PRUEBA (borrar después) ====================
+        # colores = ["#ffcccc", "#ccffcc", "#ccccff", "#ffffcc", 
+        #         "#ffccff", "#ccffff", "#ffddaa", "#ddaaff", "#aaffdd","#ffffcc"]
+
+        # for col in range(10):
+        #     for row in range(4):
+        #         f = tk.Frame(self, bg=colores[col])
+        #         f.grid(row=row, column=col, sticky="nsew", padx=1, pady=1)
+        #         tk.Label(f, text=f"C{col}", bg=colores[col], 
+        #                 font=("Segoe UI", 6)).pack(expand=True)
+        # # ===========================================================================
+
         # Configurar columnas
         self.columnconfigure(0, weight=0)
         self.columnconfigure(1, weight=0)
@@ -47,7 +186,9 @@ class TabDetalle(ttk.Frame):
         self.columnconfigure(6, weight=0)
         self.columnconfigure(7, weight=0)
         self.columnconfigure(8, weight=0)
-        self.columnconfigure(9, weight=1)   # espacio residual a la derecha
+        self.columnconfigure(9, weight=0)
+        self.columnconfigure(10, weight=1)
+        # self.columnconfigure(9, weight=1)
 
         # ==================== FILA 0: Búsquedas ====================
         tk.Label(self, text="Descripción1").grid(row=0, column=0, sticky="e", padx=(10,4), pady=8)
@@ -82,7 +223,7 @@ class TabDetalle(ttk.Frame):
         self.comboBolsas.bind("<<ComboboxSelected>>", self.comboBolsasClick)
         self.comboClasificaciones.bind("<<ComboboxSelected>>", self.comboClasificacionClick)
 
-        # Radiobuttons de orden (más a la izquierda)
+        # Radiobuttons de orden
         ttk.Radiobutton(self, text="Descripción", variable=self.intOrden, value=1, command=self.buscar).grid(row=1, column=3, sticky="w", padx=2)
         ttk.Radiobutton(self, text="Clasificación", variable=self.intOrden, value=2, command=self.buscar).grid(row=1, column=4, sticky="w", padx=2)
         ttk.Radiobutton(self, text="Detalle", variable=self.intOrden, value=3, command=self.buscar).grid(row=1, column=5, sticky="w", padx=2)
@@ -160,6 +301,7 @@ class TabDetalle(ttk.Frame):
         self.style.configure("Treeview.Heading", font=("Segoe UI", 9, "bold"))
 
         self.rowconfigure(4, weight=1)
+
 
     def buscar(self, *args):
         

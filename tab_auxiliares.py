@@ -6,7 +6,6 @@ import sqlite3
 DB_NAME = "inventario.db"
 
 class TabAuxiliares(ttk.Frame):
-
     def __init__(self, parent, app):
         super().__init__(parent)
         self.app = app

@@ -39,9 +39,12 @@ class InventarioApp(tk.Tk):
         self.tab_aux = TabAuxiliares(self.notebook,self)
         
         self.notebook.add(self.tab_detalle, text="📝 Detalle")
-        self.notebook.add(self.tab_aux, text="⚙️ Auxiliares")
+        self.notebook.add(self.tab_aux, text="⚒️ Auxiliares")
 
         self.notebook.bind("<<NotebookTabChanged>>", self.on_tab_changed)
+
+        # self.tab_prueba = TabPrueba(self.notebook, self)
+        # self.notebook.add(self.tab_prueba, text="📦 Prueba")
 
         barra_menus = tk.Menu()
         self.config(menu=barra_menus)

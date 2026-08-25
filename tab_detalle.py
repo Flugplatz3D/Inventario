@@ -2,8 +2,6 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 import sqlite3
 
-DB_NAME = "inventario.db"
-
 class TabDetalle(ttk.Frame):
     def __init__(self, parent, app):
         super().__init__(parent)
@@ -243,7 +241,7 @@ class TabDetalle(ttk.Frame):
         try:
             self.botonDetalle.config(state=tk.ACTIVE)
             self.botonEliminar.config(state=tk.ACTIVE)
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cursor.execute(cadena)
             rows = cursor.fetchall()
@@ -327,7 +325,7 @@ class TabDetalle(ttk.Frame):
     def llenarCajas(self):
         try:
             id_seccion = self.app.id_seccion_actual
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cadena = f"SELECT CajaID, Caja FROM cajas WHERE SeccionID = {id_seccion} ORDER BY upper(Caja)"
             cursor.execute(cadena)
@@ -346,7 +344,7 @@ class TabDetalle(ttk.Frame):
     def llenarBolsas(self):
         try:
             id_seccion = self.app.id_seccion_actual
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cadena = f"SELECT BolsaID, Bolsa FROM bolsas WHERE SeccionID = {id_seccion} ORDER BY upper(Bolsa)"
             cursor.execute(cadena)
@@ -365,7 +363,7 @@ class TabDetalle(ttk.Frame):
     def llenarClasificacion(self):
         try:
             id_seccion = self.app.id_seccion_actual
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cadena = "SELECT ClasificacionID, Clasificacion FROM clasificaciones"
             cadena +=f" WHERE SeccionID = {id_seccion} ORDER BY upper(Clasificacion)"
@@ -430,7 +428,7 @@ class TabDetalle(ttk.Frame):
             valores = self.tree.item(seleccion[0])['values']
             desc, clasif, detalle, caja_actual, tipocaja, bolsa_actual, tipobolsa, cantidad, detalle_id = valores
             try:
-                conn = sqlite3.connect(DB_NAME)
+                conn = sqlite3.connect(self.app.db_path.get())
                 cursor = conn.cursor()
                 cadena = "delete from detalles "
                 cadena += " where DetalleID = " + str(detalle_id)                
@@ -593,7 +591,7 @@ class TabDetalle(ttk.Frame):
                 return
             
             try:
-                conn = sqlite3.connect(DB_NAME)
+                conn = sqlite3.connect(self.app.db_path.get())  
                 cursor = conn.cursor()
                 cadena = "update detalles "
                 cadena += "set Descripcion = '" + nuevo_desc + "', " 
@@ -756,7 +754,7 @@ class TabDetalle(ttk.Frame):
                 return
 
             try:
-                conn = sqlite3.connect(DB_NAME)
+                conn = sqlite3.connect(self.app.db_path.get())
                 cursor = conn.cursor()
                 
                 cursor.execute("""
@@ -806,7 +804,7 @@ class TabDetalle(ttk.Frame):
             return
         
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cadena = f"select t.TipoCaja from cajas c, tiposCaja t "
             cadena += f"where c.TipoCajaID = t.TipoCajaID and c.CajaID = {caja_seleccionada_id}"
@@ -828,7 +826,7 @@ class TabDetalle(ttk.Frame):
             return
         
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cadena = f"select t.TipoBolsa from bolsas c, tiposBolsa t "
             cadena += f"where c.TipoBolsaID = t.TipoBolsaID and c.BolsaID = {bolsa_seleccionada_id}"

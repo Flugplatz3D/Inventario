@@ -6,7 +6,7 @@ from tab_auxiliares import TabAuxiliares
 import configparser
 import sqlite3
 
-DB_NAME = "inventario.db"
+DB_NAME = "inventario_x.db"
 
 class InventarioApp(tk.Tk):
     def __init__(self):
@@ -27,6 +27,8 @@ class InventarioApp(tk.Tk):
 
         self.seccion = tk.StringVar()
         self.seccion.set(self.leer_config("CONFIGURACION", "seccion_inicial", ""))
+        self.db_path = tk.StringVar()
+        self.db_path.set(self.leer_config("CONFIGURACION", "db_path", ""))
 
         self.id_seccion_actual = self.leer_id_seccion(self.seccion.get())
         self.secciones = []
@@ -42,9 +44,6 @@ class InventarioApp(tk.Tk):
         self.notebook.add(self.tab_aux, text="⚒️ Auxiliares")
 
         self.notebook.bind("<<NotebookTabChanged>>", self.on_tab_changed)
-
-        # self.tab_prueba = TabPrueba(self.notebook, self)
-        # self.notebook.add(self.tab_prueba, text="📦 Prueba")
 
         barra_menus = tk.Menu()
         self.config(menu=barra_menus)
@@ -75,7 +74,7 @@ class InventarioApp(tk.Tk):
     def leer_id_seccion(self, seccion_inicial):
         if seccion_inicial:
             try:
-                conn = sqlite3.connect(DB_NAME)
+                conn = sqlite3.connect(self.db_path.get())
                 cursor = conn.cursor()
                 cursor.execute("SELECT SeccionID FROM Secciones WHERE Seccion = ?", (seccion_inicial,))
                 result = cursor.fetchone()
@@ -107,7 +106,7 @@ class InventarioApp(tk.Tk):
         y = (screen_height/2) - (height/2) - 60
         ventana_modal.geometry('%dx%d+%d+%d' % (width, height, x, y))
         ventana_modal.resizable(False, False)
-        label = tk.Label(ventana_modal, text="Inventario App Versión 1.1.7\n© 2026\n(Flugplatz3D)", font=("Arial", 11), justify="center")
+        label = tk.Label(ventana_modal, text="Inventario App Versión 1.1.8\n© 2026\n(Flugplatz3D)", font=("Arial", 11), justify="center")
         label.pack(pady=10)
         tk.Button(ventana_modal, text="Cerrar", command=ventana_modal.destroy, width=10).pack(pady=20)
         # Esto bloquea la ventana principal
@@ -169,7 +168,7 @@ class InventarioApp(tk.Tk):
 
     def llenar_secciones(self):
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.db_path.get())
             cursor = conn.cursor()
             cadena = "SELECT SeccionID, Seccion FROM Secciones ORDER BY upper(Seccion)"
             cursor.execute(cadena)

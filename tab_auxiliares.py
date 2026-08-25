@@ -3,8 +3,6 @@ import tkinter as tk
 from tkinter import TRUE, ttk, messagebox
 import sqlite3
 
-DB_NAME = "inventario.db"
-
 class TabAuxiliares(ttk.Frame):
     def __init__(self, parent, app):
         super().__init__(parent)
@@ -296,7 +294,7 @@ class TabAuxiliares(ttk.Frame):
 
     def llenar_clasificacion(self):
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cursor.execute(f"SELECT ClasificacionID, Clasificacion FROM Clasificaciones where SeccionID = {self.app.id_seccion_actual} ORDER BY upper(Clasificacion)")
             rows = cursor.fetchall()
@@ -315,7 +313,7 @@ class TabAuxiliares(ttk.Frame):
 
     def llenar_cajas(self):
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cadena = f"SELECT CajaID, Caja FROM cajas where SeccionID = {self.app.id_seccion_actual} ORDER BY upper(Caja)"  
             cursor.execute(cadena)
@@ -335,7 +333,7 @@ class TabAuxiliares(ttk.Frame):
             
     def llenar_tipos_caja_cajas(self):
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cursor.execute("SELECT TipoCajaID, TipoCaja FROM TiposCaja ORDER BY upper(TipoCaja)")
             rows = cursor.fetchall()
@@ -352,7 +350,7 @@ class TabAuxiliares(ttk.Frame):
 
     def llenar_bolsas(self):
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cadena = f"SELECT BolsaID, Bolsa FROM bolsas where SeccionID = {self.app.id_seccion_actual}  ORDER BY upper(Bolsa)"
             cursor.execute(cadena)
@@ -372,7 +370,7 @@ class TabAuxiliares(ttk.Frame):
 
     def llenar_tipos_bolsa_bolsas(self):
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cursor.execute("SELECT TipoBolsaID, TipoBolsa FROM TiposBolsa ORDER BY upper(TipoBolsa)")
             rows = cursor.fetchall()
@@ -391,7 +389,7 @@ class TabAuxiliares(ttk.Frame):
 
     def llenar_tipos_caja(self):
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cursor.execute("SELECT TipoCajaID, TipoCaja FROM TiposCaja ORDER BY upper(TipoCaja)")
             rows = cursor.fetchall()
@@ -408,7 +406,7 @@ class TabAuxiliares(ttk.Frame):
 
     def llenar_tipos_bolsa(self):
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cursor.execute("SELECT TipoBolsaID, TipoBolsa FROM TiposBolsa ORDER BY upper(TipoBolsa)")
             rows = cursor.fetchall()
@@ -427,7 +425,7 @@ class TabAuxiliares(ttk.Frame):
 
     def llenar_secciones(self):
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cadena = f"SELECT SeccionID, Seccion FROM Secciones where SeccionID <> {self.app.id_seccion_actual} ORDER BY upper(Seccion)"
             cursor.execute(cadena)
@@ -621,7 +619,7 @@ class TabAuxiliares(ttk.Frame):
             self.botonGuardarSeccion.config(state="normal")
             return
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             if selected != '' and self.id_seccion_actual != 0:
                 cadena = f"UPDATE Secciones SET Seccion = '{valor}' WHERE SeccionID = {self.id_seccion_actual}"
@@ -651,7 +649,7 @@ class TabAuxiliares(ttk.Frame):
 
     def leer_id(self, tabla, nombre_columna_id, nombre_columna_valor, valor):
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cadena = f"SELECT {nombre_columna_id} FROM {tabla} WHERE {nombre_columna_valor} = ?"
             cursor.execute(cadena, (valor,))
@@ -678,7 +676,7 @@ class TabAuxiliares(ttk.Frame):
             self.botonGuardarClasificacion.config(state="normal")
             return
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             if selected != '' and self.id_clasificacion_actual != 0:
                 cadena = f"UPDATE Clasificaciones SET Clasificacion = '{valor}', SeccionID = {self.app.id_seccion_actual} WHERE ClasificacionID = {self.id_clasificacion_actual}"
@@ -715,7 +713,7 @@ class TabAuxiliares(ttk.Frame):
         valor_tipo_caja = self.combo_tipo_caja_cajas.get()
         self.id_tipo_caja_cajas_actual = self.ids_tipo_caja_cajas.get(valor_tipo_caja, 0)
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             if selected != '' and self.id_caja_actual != 0:
                 cadena = f"UPDATE Cajas SET Caja = '{valor_caja}', TipoCajaID = {self.id_tipo_caja_cajas_actual}, SeccionID = {self.app.id_seccion_actual} WHERE CajaID = {self.id_caja_actual}"
@@ -746,7 +744,7 @@ class TabAuxiliares(ttk.Frame):
         valor_tipo_bolsa = self.combo_tipo_bolsa_bolsas.get()
         self.id_tipo_bolsa_bolsas_actual = self.idsTipoBolsa_bolsas.get(valor_tipo_bolsa, 0)
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             print(f"Guardar Bolsa: {valor_bolsa}, ID actual: {self.id_bolsa_actual}")
             if selected != '' and self.id_bolsa_actual != 0:
@@ -773,7 +771,7 @@ class TabAuxiliares(ttk.Frame):
             messagebox.showwarning("Error", "Se debe rellenar el Tipo de Caja")
             return
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             print(f"Guardar Tipo de Caja: {valor}, ID actual: {self.id_tipo_caja_actual}")
             if selected != '' and self.id_tipo_caja_actual != 0:
@@ -799,7 +797,7 @@ class TabAuxiliares(ttk.Frame):
             messagebox.showwarning("Error", "Se debe rellenar el Tipo de Bolsa")
             return
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             print(f"Guardar Tipo de Bolsa: {valor}, ID actual: {self.id_tipo_bolsa_actual}")
             if selected != '' and self.id_tipo_bolsa_actual != 0:
@@ -825,7 +823,7 @@ class TabAuxiliares(ttk.Frame):
         total = self.contar_registros_asociados_tablas(self.id_clasificacion_actual, "ClasificacionID", "detalles")
         if total != -1:
             try:
-                conn = sqlite3.connect(DB_NAME)
+                conn = sqlite3.connect(self.app.db_path.get())
                 cursor = conn.cursor()
                 if total > 0:
                     messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
@@ -850,7 +848,7 @@ class TabAuxiliares(ttk.Frame):
         total = self.contar_registros_asociados_tablas(self.id_caja_actual, "CajaID", "detalles")
         if total != -1:
             try:    
-                conn = sqlite3.connect(DB_NAME)
+                conn = sqlite3.connect(self.app.db_path.get())
                 cursor = conn.cursor()
                 if total > 0:
                     messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
@@ -876,7 +874,7 @@ class TabAuxiliares(ttk.Frame):
         total = self.contar_registros_asociados_tablas(self.id_bolsa_actual, "BolsaID", "detalles")
         if total != -1:
             try:
-                conn = sqlite3.connect(DB_NAME)
+                conn = sqlite3.connect(self.app.db_path.get())
                 cursor = conn.cursor()
                 if total > 0:
                     messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
@@ -902,7 +900,7 @@ class TabAuxiliares(ttk.Frame):
         total = self.contar_registros_asociados_tablas(self.id_tipo_caja_actual, "TipoCajaID", "cajas")
         if total != -1:
             try:
-                conn = sqlite3.connect(DB_NAME)
+                conn = sqlite3.connect(self.app.db_path.get())
                 cursor = conn.cursor()
                 if total > 0:
                     messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
@@ -928,7 +926,7 @@ class TabAuxiliares(ttk.Frame):
         total = self.contar_registros_asociados_tablas(self.id_tipo_bolsa_actual, "TipoBolsaID", "bolsas")
         if total != -1:
             try:
-                conn = sqlite3.connect(DB_NAME)
+                conn = sqlite3.connect(self.app.db_path.get())
                 cursor = conn.cursor()
                 if total > 0:
                     messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
@@ -956,7 +954,7 @@ class TabAuxiliares(ttk.Frame):
         # print(f"Total registros asociados a la sección {self.id_seccion_actual}: {total}")
         if total != -1:
             try:
-                conn = sqlite3.connect(DB_NAME)
+                conn = sqlite3.connect(self.app.db_path.get())
                 cursor = conn.cursor()
                 if total > 0:
                     messagebox.showerror("Eliminar", f"No se puede borrar:\nHay {total} registros asociados")
@@ -975,7 +973,7 @@ class TabAuxiliares(ttk.Frame):
 
     def contar_registros_asociados_secciones(self, valor_id):
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cadena = "SELECT"
             cadena += f"(SELECT COUNT(*) FROM cajas where SeccionID = {valor_id}) +"
@@ -1009,7 +1007,7 @@ class TabAuxiliares(ttk.Frame):
             self.combo_tipo_caja_cajas.set('')
             return  
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cadena = f"select t.TipoCaja from tiposCaja t, cajas c where c.CajaID =  {self.id_caja_actual}"
             cadena += " and t.TipoCajaID = c.TipoCajaID"
@@ -1033,7 +1031,7 @@ class TabAuxiliares(ttk.Frame):
             self.combo_tipo_bolsa_bolsas.set('')
             return
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cadena = f"select t.TipoBolsa from tiposBolsa t, bolsas c where c.BolsaID =  {self.id_bolsa_actual}"
             cadena += " and t.TipoBolsaID = c.TipoBolsaID"
@@ -1092,7 +1090,7 @@ class TabAuxiliares(ttk.Frame):
 
     def contar_registros_asociados_tablas(self, valor_id, campo, tabla):
         try:
-            conn = sqlite3.connect(DB_NAME)
+            conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cadena = f"SELECT count(*) FROM {tabla} WHERE {campo} = {valor_id}"
             cursor.execute(cadena)

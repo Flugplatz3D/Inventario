@@ -28,7 +28,12 @@ class InventarioApp(tk.Tk):
         self.seccion = tk.StringVar()
         self.seccion.set(self.leer_config("CONFIGURACION", "seccion_inicial", ""))
         self.db_path = tk.StringVar()
-        self.db_path.set(self.leer_config("CONFIGURACION", "db_path", ""))
+        self.db_path.set(self.leer_config("CONFIGURACION", "db_path", DB_NAME))
+
+        if not self.test_db(self.db_path.get()):
+            messagebox.showerror("Error", f"No se pudo conectar con la base de datos: {self.db_path.get()}")
+            self.destroy()
+            return
 
         self.id_seccion_actual = self.leer_id_seccion(self.seccion.get())
         self.secciones = []
@@ -71,6 +76,18 @@ class InventarioApp(tk.Tk):
 
         self.tab_aux.seccion_actual_labelID.set(self.seccion.get())
 
+    def test_db(self, path_db):
+        try:
+            conn = sqlite3.connect(path_db)
+            cursor = conn.cursor()
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+            tables = cursor.fetchall()
+            conn.close()
+            return len(tables) > 0
+        except Exception as e:
+            messagebox.showerror("Error", f"Error al conectar con la base de datos:\n{e}")
+            return False
+
     def leer_id_seccion(self, seccion_inicial):
         if seccion_inicial:
             try:
@@ -98,15 +115,15 @@ class InventarioApp(tk.Tk):
     def modal_acerca_de(self):
         ventana_modal = tk.Toplevel(self)
         ventana_modal.title("Acerca de ...")
-        width = 280
-        height = 150
+        width = 380
+        height = 160
         screen_width = ventana_modal.winfo_screenwidth()
         screen_height = ventana_modal.winfo_screenheight()
         x = (screen_width/2) - (width/2)
         y = (screen_height/2) - (height/2) - 60
         ventana_modal.geometry('%dx%d+%d+%d' % (width, height, x, y))
         ventana_modal.resizable(False, False)
-        label = tk.Label(ventana_modal, text="Inventario App Versión 1.1.8\n© 2026\n(Flugplatz3D)", font=("Arial", 11), justify="center")
+        label = tk.Label(ventana_modal, text=f"Inventario App Versión 1.1.8\n© 2026\n(Mario VC)\n({self.db_path.get()})", font=("Arial", 11), justify="center")
         label.pack(pady=10)
         tk.Button(ventana_modal, text="Cerrar", command=ventana_modal.destroy, width=10).pack(pady=20)
         # Esto bloquea la ventana principal
@@ -196,9 +213,9 @@ class InventarioApp(tk.Tk):
         with open("config.ini", "w", encoding="utf-8") as f:
             config.write(f)
         
-        self.seccion.set(seccion)   # Actualizamos la variable interna
+        self.seccion.set(seccion)   # Actualiza la variable interna
 
-        self.title(f"Inventario ({self.seccion.get()})")  # Actualizamos el título de la ventana principal
+        self.title(f"Inventario ({self.seccion.get()})")  # Actualiza el título de la ventana principal
 
         self.tab_detalle.limpiar()  # Limpia los campos en la pestaña Detalle
         self.tab_detalle.llenarCajas()  # Actualiza las cajas en la pestaña Detalle

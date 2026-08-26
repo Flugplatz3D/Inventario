@@ -35,19 +35,6 @@ class TabDetalle(ttk.Frame):
         # self.entrada1.insert(0, "ESP32")
 
     def setup_ui(self):
-        # # ==================== COLORES DE PRUEBA (borrar después) ===================
-        # colores = ["#ffcccc", "#ccffcc", "#ccccff", "#ffffcc", 
-        #         "#ffccff", "#ccffff", "#ffddaa", "#ddaaff", "#aaffdd","#ffffcc","#e0feb7"]
-
-        # for col in range(10):
-        #     for row in range(4):
-        #         f = tk.Frame(self, bg=colores[col])
-        #         f.grid(row=row, column=col, sticky="nsew", padx=1, pady=1)
-        #         # print(f"columna{col}")
-        #         tk.Label(f, text=f"C{col}", bg=colores[col], 
-        #                 font=("Segoe UI", 6)).pack(expand=True)
-        # # ===========================================================================
-
         # Configurar columnas
         self.columnconfigure(0, weight=0, minsize=80)
         self.columnconfigure(1, weight=0)
@@ -181,7 +168,6 @@ class TabDetalle(ttk.Frame):
         self.style.configure("Treeview.Heading", font=("Segoe UI", 9, "bold"))
 
         self.rowconfigure(4, weight=1)
-
 
     def buscar(self, *args):
         

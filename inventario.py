@@ -6,7 +6,7 @@ from tab_auxiliares import TabAuxiliares
 import configparser
 import sqlite3
 
-DB_NAME = "inventario_x.db"
+DB_NAME = "inventario_test.db"
 
 class InventarioApp(tk.Tk):
     def __init__(self):

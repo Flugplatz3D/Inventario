@@ -746,7 +746,7 @@ class TabAuxiliares(ttk.Frame):
         try:
             conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
-            print(f"Guardar Bolsa: {valor_bolsa}, ID actual: {self.id_bolsa_actual}")
+            # print(f"Guardar Bolsa: {valor_bolsa}, ID actual: {self.id_bolsa_actual}")
             if selected != '' and self.id_bolsa_actual != 0:
                 cadena = f"UPDATE Bolsas SET Bolsa = '{valor_bolsa}', TipoBolsaID = {self.id_tipo_bolsa_bolsas_actual}, SeccionID = {self.app.id_seccion_actual} WHERE BolsaID = {self.id_bolsa_actual}"
             else:
@@ -773,7 +773,7 @@ class TabAuxiliares(ttk.Frame):
         try:
             conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
-            print(f"Guardar Tipo de Caja: {valor}, ID actual: {self.id_tipo_caja_actual}")
+            # print(f"Guardar Tipo de Caja: {valor}, ID actual: {self.id_tipo_caja_actual}")
             if selected != '' and self.id_tipo_caja_actual != 0:
                 cadena = f"UPDATE TiposCaja SET TipoCaja = '{valor}' WHERE TipoCajaID = {self.id_tipo_caja_actual}"
             else:
@@ -799,7 +799,7 @@ class TabAuxiliares(ttk.Frame):
         try:
             conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
-            print(f"Guardar Tipo de Bolsa: {valor}, ID actual: {self.id_tipo_bolsa_actual}")
+            # print(f"Guardar Tipo de Bolsa: {valor}, ID actual: {self.id_tipo_bolsa_actual}")
             if selected != '' and self.id_tipo_bolsa_actual != 0:
                 cadena = f"UPDATE TiposBolsa SET TipoBolsa = '{valor}' WHERE TipoBolsaID = {self.id_tipo_bolsa_actual}"
             else:

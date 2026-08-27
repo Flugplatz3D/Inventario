@@ -6,7 +6,7 @@ Para compilar en Windows:
 
 cd C:\gitub\Inventario  <-- Donde esten todos los archivos
 
-pyinstaller --onefile --windowed --clean --icon=warehouse_storage.ico --name Inventario --add-data "inventario.db;." inventario.py
+pyinstaller --onefile --windowed --clean --icon=warehouse_storage.ico --name Inventario inventario.py
 
 mover EXE de carpeta dist
 

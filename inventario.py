@@ -100,7 +100,6 @@ class InventarioApp(tk.Tk):
                     return result[0]
             except Exception as e:
                 messagebox.showerror("Error", f"Error al leer el ID de la sección:\n{e}")
-
         return 0
 
     def leer_config(self, entrada, clave, valor_por_defecto):
@@ -177,7 +176,7 @@ class InventarioApp(tk.Tk):
         ventana_modal.focus()
 
     def modal_csv(self,event = None):
-        messagebox.showinfo("Generar CSV", "Pendiente de desarrollo")
+        self.tab_detalle.generar_csv()
 
     def combo_secciones_click(self, event):
         selected = self.combo_secciones.get()
@@ -226,6 +225,7 @@ class InventarioApp(tk.Tk):
         self.tab_aux.llenar_cajas()
         self.tab_aux.llenar_bolsas()
         self.tab_aux.llenar_clasificacion()
+        self.tab_aux.llenar_secciones()
         self.tab_aux.nuevo_caja()
         self.tab_aux.nuevo_bolsa()
         self.tab_aux.nuevo_clasificacion()

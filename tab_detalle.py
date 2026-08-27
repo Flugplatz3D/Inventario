@@ -1,5 +1,6 @@
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import filedialog, messagebox, ttk
+import csv
 import sqlite3
 
 class TabDetalle(ttk.Frame):
@@ -256,6 +257,30 @@ class TabDetalle(ttk.Frame):
 
         except Exception as e:
             messagebox.showerror("Error", f"Error en la consulta:\n{e}")
+
+    def generar_csv(self):
+        filas = [self.tree.item(item, "values") for item in self.tree.get_children()]
+        if not filas:
+            messagebox.showinfo("Generar CSV", "No hay resultados de búsqueda para exportar.")
+            return
+
+        ruta = filedialog.asksaveasfilename(
+            title="Guardar CSV",
+            defaultextension=".csv",
+            filetypes=(("Archivos CSV", "*.csv"), ("Todos los archivos", "*.*"))
+        )
+        if not ruta:
+            return
+
+        encabezados = [self.tree.heading(col, "text") for col in self.tree["columns"]]
+        try:
+            with open(ruta, "w", newline="", encoding="utf-8-sig") as archivo:
+                escritor = csv.writer(archivo)
+                escritor.writerow(encabezados)
+                escritor.writerows(filas)
+            messagebox.showinfo("Generar CSV", f"Archivo guardado correctamente en:\n{ruta}")
+        except OSError as error:
+            messagebox.showerror("Error", f"No se pudo guardar el archivo CSV:\n{error}")
 
     def limpiar(self):
         self.entrada1.delete(0, tk.END)

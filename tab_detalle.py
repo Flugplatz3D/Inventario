@@ -89,19 +89,19 @@ class TabDetalle(ttk.Frame):
         rb_orden_frame = ttk.Frame(self)
         rb_orden_frame.grid(row=2, column=3, columnspan=6, sticky="w", padx=2, pady=2)
 
-        ttk.Radiobutton(rb_orden_frame, text="Descripción", variable=self.intOrden, value=1, command=self.buscar).pack(side="left", padx=(0, 10))
-        ttk.Radiobutton(rb_orden_frame, text="Clasificación", variable=self.intOrden, value=2, command=self.buscar).pack(side="left", padx=(0, 10))
-        ttk.Radiobutton(rb_orden_frame, text="Detalle", variable=self.intOrden, value=3, command=self.buscar).pack(side="left", padx=(0, 10))
-        ttk.Radiobutton(rb_orden_frame, text="Caja", variable=self.intOrden, value=4, command=self.buscar).pack(side="left", padx=(0, 10))
-        ttk.Radiobutton(rb_orden_frame, text="Bolsa", variable=self.intOrden, value=5, command=self.buscar).pack(side="left", padx=(0, 10))
-        ttk.Radiobutton(rb_orden_frame, text="ID", variable=self.intOrden, value=6, command=self.buscar).pack(side="left")
+        ttk.Radiobutton(rb_orden_frame, text="Descripción", variable=self.intOrden, value=1, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
+        ttk.Radiobutton(rb_orden_frame, text="Clasificación", variable=self.intOrden, value=2, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
+        ttk.Radiobutton(rb_orden_frame, text="Detalle", variable=self.intOrden, value=3, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
+        ttk.Radiobutton(rb_orden_frame, text="Caja", variable=self.intOrden, value=4, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
+        ttk.Radiobutton(rb_orden_frame, text="Bolsa", variable=self.intOrden, value=5, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
+        ttk.Radiobutton(rb_orden_frame, text="ID", variable=self.intOrden, value=6, command=self.aplicar_orden_actual).pack(side="left")
 
         # Frame para ASC / DESC
         rb_sentido_frame = ttk.Frame(self)
         rb_sentido_frame.grid(row=2, column=6, columnspan=4, sticky="w", padx=2, pady=2)
 
-        ttk.Radiobutton(rb_sentido_frame, text="ASC", variable=self.intSentido, value=1, command=self.buscar).pack(side="left", padx=(0, 10))
-        ttk.Radiobutton(rb_sentido_frame, text="DESC", variable=self.intSentido, value=2, command=self.buscar).pack(side="left")
+        ttk.Radiobutton(rb_sentido_frame, text="ASC", variable=self.intSentido, value=1, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
+        ttk.Radiobutton(rb_sentido_frame, text="DESC", variable=self.intSentido, value=2, command=self.aplicar_orden_actual).pack(side="left")
 
         # ==================== TREEVIEW ====================
         tree_frame = ttk.Frame(self)
@@ -112,6 +112,18 @@ class TabDetalle(ttk.Frame):
         self.tree = ttk.Treeview(tree_frame, columns=("Descripcion", "Clasificacion", "Detalle", 
                                                 "Caja", "TipoCaja", "Bolsa", "TipoBolsa", "Cantidad", "id"), 
                                 show="headings", height=15, selectmode="extended")
+
+        self._encabezados_tree = {
+            "Descripcion":   "Descripción",
+            "Clasificacion": "Clasificación",
+            "Detalle":       "Detalle",
+            "Caja":          "Caja",
+            "TipoCaja":      "TipoCaja",
+            "Bolsa":         "Bolsa",
+            "TipoBolsa":     "TipoBolsa",
+            "Cantidad":      "Cantidad",
+            "id":            "ID"
+        }
 
         columnas = {
             "Descripcion":   ("Descripción", 215),
@@ -129,6 +141,8 @@ class TabDetalle(ttk.Frame):
             self.tree.heading(col, text=texto, anchor=tk.W,
                             command=lambda c=col: self.ordenar_por_columna(c))
             self.tree.column(col, width=ancho, anchor=tk.W, stretch=False)
+
+        self.actualizar_iconos_encabezados()
 
         self.tree.column('#0', width=0, stretch=False)
         self.tree.grid(row=0, column=0, sticky="nsew")
@@ -169,6 +183,53 @@ class TabDetalle(ttk.Frame):
         self.style.configure("Treeview.Heading", font=("Segoe UI", 9, "bold"))
 
         self.rowconfigure(4, weight=1)
+
+    def get_columna_orden(self, columna):
+        mapeo = {
+            "Descripcion": 1,
+            "Clasificacion": 2,
+            "Detalle": 3,
+            "Caja": 4,
+            "Bolsa": 5,
+            "id": 6,
+        }
+        return mapeo.get(columna)
+
+    def get_next_sentido(self, columna):
+        orden_actual = self.get_columna_orden(columna)
+        if self.intOrden.get() == orden_actual:
+            return 2 if self.intSentido.get() == 1 else 1
+        return 1
+
+    def actualizar_iconos_encabezados(self):
+        for col, texto_base in self._encabezados_tree.items():
+            if self.get_columna_orden(col) == self.intOrden.get():
+                icono = " ▲" if self.intSentido.get() == 1 else " ▼"
+                self.tree.heading(col, text=f"{texto_base}{icono}")
+            else:
+                self.tree.heading(col, text=texto_base)
+
+        # Mantener solo la columna activa con el icono; columnas no ordenables no deben mostrarlo.
+        for col in ["TipoCaja", "TipoBolsa", "Cantidad"]:
+            if col in self._encabezados_tree:
+                self.tree.heading(col, text=self._encabezados_tree[col])
+
+    def aplicar_orden_actual(self):
+        self.buscar()
+        self.actualizar_iconos_encabezados()
+
+    def ordenar_por_columna(self, columna):
+        orden = self.get_columna_orden(columna)
+        if orden is None:
+            return
+
+        if self.intOrden.get() == orden:
+            self.intSentido.set(2 if self.intSentido.get() == 1 else 1)
+        else:
+            self.intOrden.set(orden)
+            self.intSentido.set(1)
+
+        self.aplicar_orden_actual()
 
     def buscar(self, *args):
         
@@ -255,6 +316,8 @@ class TabDetalle(ttk.Frame):
                 self.botonEliminar.config(state=tk.DISABLED)
                 messagebox.showinfo("Búsqueda", "No se encontraron resultados.")
 
+            self.actualizar_iconos_encabezados()
+
         except Exception as e:
             messagebox.showerror("Error", f"Error en la consulta:\n{e}")
 
@@ -326,6 +389,7 @@ class TabDetalle(ttk.Frame):
         self.id_clasificacion_actual = 0
         self.intOrden.set(1)
         self.intSentido.set(1)
+        self.actualizar_iconos_encabezados()
         self.texto_label_recuento.set("")
 
         for item in self.tree.get_children():

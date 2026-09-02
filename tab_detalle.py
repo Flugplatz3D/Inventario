@@ -36,6 +36,19 @@ class TabDetalle(ttk.Frame):
         # self.entrada1.insert(0, "ESP32")
 
     def setup_ui(self):
+
+        # # ==================== COLORES DE PRUEBA (borrar después) ====================
+        # colores = ["#ffcccc", "#ccffcc", "#ccccff", "#ffffcc", 
+        #         "#ffccff", "#ccffff", "#ffddaa", "#ddaaff", "#aaffdd", "#eeeeee"]
+
+        # for col in range(10):
+        #     for row in range(4):
+        #         f = tk.Frame(self, bg=colores[col])
+        #         f.grid(row=row, column=col, sticky="nsew", padx=1, pady=1)
+        #         tk.Label(f, text=f"C{col}", bg=colores[col], 
+        #                     font=("Segoe UI", 7)).pack(expand=True)
+        # # ===========================================================================
+
         # Configurar columnas
         self.columnconfigure(0, weight=0, minsize=80)
         self.columnconfigure(1, weight=0)
@@ -89,19 +102,19 @@ class TabDetalle(ttk.Frame):
         rb_orden_frame = ttk.Frame(self)
         rb_orden_frame.grid(row=2, column=3, columnspan=6, sticky="w", padx=2, pady=2)
 
-        ttk.Radiobutton(rb_orden_frame, text="Descripción", variable=self.intOrden, value=1, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
-        ttk.Radiobutton(rb_orden_frame, text="Clasificación", variable=self.intOrden, value=2, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
-        ttk.Radiobutton(rb_orden_frame, text="Detalle", variable=self.intOrden, value=3, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
-        ttk.Radiobutton(rb_orden_frame, text="Caja", variable=self.intOrden, value=4, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
-        ttk.Radiobutton(rb_orden_frame, text="Bolsa", variable=self.intOrden, value=5, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
-        ttk.Radiobutton(rb_orden_frame, text="ID", variable=self.intOrden, value=6, command=self.aplicar_orden_actual).pack(side="left")
+        # ttk.Radiobutton(rb_orden_frame, text="Descripción", variable=self.intOrden, value=1, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
+        # ttk.Radiobutton(rb_orden_frame, text="Clasificación", variable=self.intOrden, value=2, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
+        # ttk.Radiobutton(rb_orden_frame, text="Detalle", variable=self.intOrden, value=3, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
+        # ttk.Radiobutton(rb_orden_frame, text="Caja", variable=self.intOrden, value=4, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
+        # ttk.Radiobutton(rb_orden_frame, text="Bolsa", variable=self.intOrden, value=5, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
+        # ttk.Radiobutton(rb_orden_frame, text="ID", variable=self.intOrden, value=6, command=self.aplicar_orden_actual).pack(side="left")
 
         # Frame para ASC / DESC
         rb_sentido_frame = ttk.Frame(self)
         rb_sentido_frame.grid(row=2, column=6, columnspan=4, sticky="w", padx=2, pady=2)
 
-        ttk.Radiobutton(rb_sentido_frame, text="ASC", variable=self.intSentido, value=1, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
-        ttk.Radiobutton(rb_sentido_frame, text="DESC", variable=self.intSentido, value=2, command=self.aplicar_orden_actual).pack(side="left")
+        # ttk.Radiobutton(rb_sentido_frame, text="ASC", variable=self.intSentido, value=1, command=self.aplicar_orden_actual).pack(side="left", padx=(0, 10))
+        # ttk.Radiobutton(rb_sentido_frame, text="DESC", variable=self.intSentido, value=2, command=self.aplicar_orden_actual).pack(side="left")
 
         # ==================== TREEVIEW ====================
         tree_frame = ttk.Frame(self)

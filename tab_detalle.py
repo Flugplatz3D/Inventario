@@ -14,6 +14,7 @@ class TabDetalle(ttk.Frame):
         self.id_caja_actual = 0
         self.id_bolsa_actual = 0
         self.id_clasificacion_actual = 0
+        self.id_seccion_item = self.app.leer_id_seccion(self.app.seccion.get())
 
         self.texto_labelID = tk.StringVar()
         self.texto_labelCaja = tk.StringVar(value="labelcaja")
@@ -304,6 +305,7 @@ class TabDetalle(ttk.Frame):
             self.botonEliminar.config(state=tk.ACTIVE)
             conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
+            # print(cadena)
             cursor.execute(cadena)
             rows = cursor.fetchall()
             recuento = len(rows)
@@ -494,8 +496,9 @@ class TabDetalle(ttk.Frame):
             self.tree.selection_set(item)
             menu = tk.Menu(self, tearoff=0)
             menu.add_command(label="Editar", command=self.editar_item)
-            menu.add_separator()
             menu.add_command(label="Eliminar", command=self.eliminar_item)
+            menu.add_separator()
+            menu.add_command(label="Cambiar elemento de sección", command=self.cambiar_seccion_item)
             menu.tk_popup(event.x_root, event.y_root)
 
     def editar_item(self):
@@ -503,7 +506,10 @@ class TabDetalle(ttk.Frame):
 
     def eliminar_item(self):
         self.eliminar_seleccionado()
-    
+
+    def cambiar_seccion_item(self):
+        self.mostrar_cambiar_seccion_modal()
+
     def editar_detalle_click(self):
         self.mostrar_editar_detalle_modal()
 
@@ -714,8 +720,138 @@ class TabDetalle(ttk.Frame):
         # Enfocar primer campo
         entry_desc.focus_set()
 
+    def mostrar_cambiar_seccion_modal(self):
+        seleccion = self.tree.selection()
+        if not seleccion:
+            messagebox.showwarning("Atención", "Selecciona un registro primero")
+            return
+
+        valores = self.tree.item(seleccion[0])['values']
+
+        if not valores or len(valores) < 8:
+            return
+
+        desc, clasif, detalle, caja_actual, tipocaja, bolsa_actual, tipobolsa, cantidad, detalle_id = valores
+
+        # Crear ventana modal
+        ventana_modal = tk.Toplevel(self)
+        ventana_modal.title("Cambiar de Sección")
+        ventana_modal.geometry("400x200")
+        ventana_modal.resizable(False, False)
+        ventana_modal.transient(self)
+        ventana_modal.grab_set()
+
+        # Centrar modal
+        ventana_modal.update_idletasks()
+        x = (ventana_modal.winfo_screenwidth() // 2) - (400 // 2)
+        y = (ventana_modal.winfo_screenheight() // 2) - (200 // 2)
+        ventana_modal.geometry(f"400x200+{x}+{y}")
+
+        frame = ttk.Frame(ventana_modal, padding=20)
+        frame.grid(row=0, column=0, sticky="nsew")
+        ventana_modal.columnconfigure(0, weight=1)
+        ventana_modal.rowconfigure(0, weight=1)
+        frame.columnconfigure(1, weight=1)
+
+        ttk.Label(frame, text="Cambiar elemento de sección", font=("Segoe UI", 14, "bold")).grid(
+            row=0, column=0, columnspan=2, pady=(0, 20))
+
+        ttk.Label(frame, text="Nueva Sección:").grid(row=1, column=0, sticky="w", padx=(0, 10))
+        self.combo_secciones = ttk.Combobox(frame, values=[], width=30, state="readonly")
+        self.combo_secciones.grid(row=1, column=1, sticky="ew", pady=5)
+        self.combo_secciones.bind("<<ComboboxSelected>>", self.combo_secciones_item_click)
+
+        # self.app.llenar_secciones(self.combo_secciones, excluir_actual=True)
+        self.llenar_secciones(self.combo_secciones, excluir_actual=True)
+
+        botones_frame = ttk.Frame(frame)
+        botones_frame.grid(row=2, column=0, columnspan=2, sticky="e", pady=(20, 0))
+
+        # Botón Aceptar
+        boton_aceptar = ttk.Button(
+            botones_frame,
+            text="Aceptar",
+            command=lambda: self.actualizar_seccion_item(ventana_modal, self.combo_secciones.get())
+        )
+        boton_aceptar.grid(row=0, column=0, padx=(0, 10))
+
+        # Botón Cancelar
+        boton_cancelar = ttk.Button(botones_frame, text="Cancelar", command=ventana_modal.destroy)
+        boton_cancelar.grid(row=0, column=1)
+
+    def llenar_secciones(self, combo=None, excluir_actual=False):
+        try:
+            # messagebox.showinfo("inventario", f"seccion - {self.id_seccion_item}")
+            conn = sqlite3.connect(self.app.db_path.get())
+            cursor = conn.cursor()
+            cadena = "SELECT SeccionID, Seccion FROM Secciones"
+            parametros = ()
+            if excluir_actual:
+                cadena += " WHERE SeccionID <> ?"
+                parametros = (self.id_seccion_item,)
+            cadena += " ORDER BY upper(Seccion)"
+            cursor.execute(cadena, parametros)
+            rows = cursor.fetchall()
+            conn.close()
+
+            secciones = [row[1] for row in rows]
+            ids_seccion = {row[1]: row[0] for row in rows}
+
+            if combo is None:
+                self.secciones = secciones
+                self.ids_seccion = ids_seccion
+                combo = self.combo_secciones
+
+            combo['values'] = secciones
+            combo.set("")
+            
+        except Exception as e:
+            messagebox.showerror("Error",f"Error cargando secciones\n{e}")
+
+    def combo_secciones_item_click(self, event):
+        selected = self.combo_secciones.get()
+        # self.id_seccion_actual = self.ids_seccion.get(selected, 0)
+        # messagebox.showinfo("Información", f"Funcionalidad de cambiar sección no implementada. {self.ids_seccion.get(selected, 0)}")
+
+    def actualizar_seccion_item(self, ventana_modal, nueva_seccion):
+        seleccion = self.tree.selection()
+
+        valores = self.tree.item(seleccion[0])['values']
+        if not valores or len(valores) < 8:
+            return
+
+        detalle_id = valores[8]
+
+        if not nueva_seccion:
+            messagebox.showwarning("Atención", "Selecciona una nueva sección")
+            return
+
+        try:
+            # conn = sqlite3.connect(self.app.db_path.get())
+            # cursor = conn.cursor()
+
+            # # Obtener el ID de la nueva sección
+            # cursor.execute("SELECT SeccionID FROM secciones WHERE Seccion = ?", (nueva_seccion,))
+            # result = cursor.fetchone()
+            # if not result:
+            #     messagebox.showerror("Error", "No se encontró la sección seleccionada.")
+            #     return
+            # nueva_seccion_id = result[0]
+
+            # # # Actualizar el registro en la base de datos
+            # # cadena = "UPDATE detalles SET SeccionID = ? WHERE DetalleID = ?"
+            # # cursor.execute(cadena, (nueva_seccion_id, detalle_id))
+            # # conn.commit()
+            # conn.close()
+
+            messagebox.showinfo("Actualizar Sección", f"Funcionalidad de cambiar sección no implementada en esta versión.{detalle_id}")
+            ventana_modal.destroy()
+            self.buscar()  # Refrescar lista
+
+        except Exception as e:
+            messagebox.showerror("Error", f"No se pudo actualizar la sección:\n{e}")
+
     def mostrar_nuevo_detalle_modal(self):
-        """Ventana modal para crear un Nuevo Detalle"""
         modal = tk.Toplevel(self)
         modal.title("Nuevo Detalle")
         modal.geometry("580x445")

@@ -54,7 +54,7 @@ class InventarioApp(tk.Tk):
         self.config(menu=barra_menus)
         menu_opciones = tk.Menu(barra_menus, tearoff=False)
         menu_opciones.add_command(
-                    label="Cambiar Sección",
+                    label="Cambiar de Sección",
                     command=self.modal_configuracion,
                     compound=tk.LEFT
                 )
@@ -131,7 +131,7 @@ class InventarioApp(tk.Tk):
 
     def modal_configuracion(self, event = None):
         ventana_modal = tk.Toplevel(self)
-        ventana_modal.title("Cambiar Sección")
+        ventana_modal.title("Cambiar de Sección")
         width = 380
         height = 150
         screen_width = ventana_modal.winfo_screenwidth()
@@ -157,9 +157,8 @@ class InventarioApp(tk.Tk):
         self.combo_secciones.config(state="readonly")
         self.combo_secciones.bind("<<ComboboxSelected>>", self.combo_secciones_click)
 
-        # Botón Guardar
-        boton_aceptar = ttk.Button(
-                                ventana_modal, 
+        # Botón Aceptar
+        boton_aceptar = ttk.Button(ventana_modal, 
                                 text="Aceptar", 
                                 command=lambda: self.guardar_configuracion(ventana_modal, self.combo_secciones.get()))
         boton_aceptar.grid(row=3, column=1, sticky="E", padx=10, pady=15)
@@ -182,19 +181,30 @@ class InventarioApp(tk.Tk):
         selected = self.combo_secciones.get()
         self.id_seccion_actual = self.ids_seccion.get(selected, 0)
 
-    def llenar_secciones(self):
+    def llenar_secciones(self, combo=None, excluir_actual=False):
         try:
             conn = sqlite3.connect(self.db_path.get())
             cursor = conn.cursor()
-            cadena = "SELECT SeccionID, Seccion FROM Secciones ORDER BY upper(Seccion)"
-            cursor.execute(cadena)
+            cadena = "SELECT SeccionID, Seccion FROM Secciones"
+            parametros = ()
+            if excluir_actual:
+                cadena += " WHERE SeccionID <> ?"
+                parametros = (self.id_seccion_actual,)
+            cadena += " ORDER BY upper(Seccion)"
+            cursor.execute(cadena, parametros)
             rows = cursor.fetchall()
             conn.close()
 
-            self.secciones = [row[1] for row in rows]
-            self.ids_seccion = {row[1]: row[0] for row in rows}
+            secciones = [row[1] for row in rows]
+            ids_seccion = {row[1]: row[0] for row in rows}
 
-            self.combo_secciones['values'] = self.secciones
+            if combo is None:
+                self.secciones = secciones
+                self.ids_seccion = ids_seccion
+                combo = self.combo_secciones
+
+            combo['values'] = secciones
+            combo.set("")
             
         except Exception as e:
             messagebox.showerror("Error",f"Error cargando secciones\n{e}")

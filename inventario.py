@@ -167,7 +167,7 @@ class InventarioApp(tk.Tk):
         boton_cancelar = ttk.Button(ventana_modal, text="Cancelar", command=ventana_modal.destroy)
         boton_cancelar.grid(row=3, column=2, sticky="W", padx=10, pady=15)
         
-        self.llenar_secciones()
+        self.llenar_secciones_cambiar()
         self.combo_secciones.set(self.seccion.get())  # Establece la sección inicial desde config.ini
         
         # Esto bloquea la ventana principal
@@ -181,7 +181,7 @@ class InventarioApp(tk.Tk):
         selected = self.combo_secciones.get()
         self.id_seccion_actual = self.ids_seccion.get(selected, 0)
 
-    def llenar_secciones(self, combo=None, excluir_actual=False):
+    def llenar_secciones_cambiar(self, combo=None, excluir_actual=False):
         try:
             conn = sqlite3.connect(self.db_path.get())
             cursor = conn.cursor()

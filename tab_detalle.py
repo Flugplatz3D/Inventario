@@ -15,7 +15,7 @@ class TabDetalle(ttk.Frame):
         self.id_bolsa_actual = 0
         self.id_clasificacion_actual = 0
         self.id_seccion_item = self.app.leer_id_seccion(self.app.seccion.get())
-
+        self.id_seccion_item_cambiar = 0
         self.texto_labelID = tk.StringVar()
         self.texto_labelCaja = tk.StringVar(value="labelcaja")
         self.texto_labelBolsa = tk.StringVar(value="labelBolsa")
@@ -27,6 +27,9 @@ class TabDetalle(ttk.Frame):
         self.idsBolsas = {}
         self.clasificacion = []
         self.idsClasificacion = {}
+
+        self.secciones_item = []
+        self.ids_seccion_item = {}
 
         self.setup_ui()
         self.llenarCajas()
@@ -762,7 +765,7 @@ class TabDetalle(ttk.Frame):
         self.combo_secciones.bind("<<ComboboxSelected>>", self.combo_secciones_item_click)
 
         # self.app.llenar_secciones(self.combo_secciones, excluir_actual=True)
-        self.llenar_secciones(self.combo_secciones, excluir_actual=True)
+        self.llenar_secciones_item(self.combo_secciones, excluir_actual=True)
 
         botones_frame = ttk.Frame(frame)
         botones_frame.grid(row=2, column=0, columnspan=2, sticky="e", pady=(20, 0))
@@ -779,9 +782,8 @@ class TabDetalle(ttk.Frame):
         boton_cancelar = ttk.Button(botones_frame, text="Cancelar", command=ventana_modal.destroy)
         boton_cancelar.grid(row=0, column=1)
 
-    def llenar_secciones(self, combo=None, excluir_actual=False):
+    def llenar_secciones_item(self, combo=None, excluir_actual=False):
         try:
-            # messagebox.showinfo("inventario", f"seccion - {self.id_seccion_item}")
             conn = sqlite3.connect(self.app.db_path.get())
             cursor = conn.cursor()
             cadena = "SELECT SeccionID, Seccion FROM Secciones"
@@ -794,15 +796,14 @@ class TabDetalle(ttk.Frame):
             rows = cursor.fetchall()
             conn.close()
 
-            secciones = [row[1] for row in rows]
-            ids_seccion = {row[1]: row[0] for row in rows}
+            self.secciones_item = [row[1] for row in rows]
+            ids_seccion_item = {row[1]: row[0] for row in rows}
+            self.ids_seccion_item = ids_seccion_item
 
             if combo is None:
-                self.secciones = secciones
-                self.ids_seccion = ids_seccion
                 combo = self.combo_secciones
 
-            combo['values'] = secciones
+            combo['values'] = self.secciones_item
             combo.set("")
             
         except Exception as e:
@@ -810,8 +811,8 @@ class TabDetalle(ttk.Frame):
 
     def combo_secciones_item_click(self, event):
         selected = self.combo_secciones.get()
-        # self.id_seccion_actual = self.ids_seccion.get(selected, 0)
-        # messagebox.showinfo("Información", f"Funcionalidad de cambiar sección no implementada. {self.ids_seccion.get(selected, 0)}")
+        id_seccion = self.ids_seccion_item.get(selected, 0)
+        # messagebox.showinfo("Información", f"Sección seleccionada: {selected}\nID: {id_seccion}")
 
     def actualizar_seccion_item(self, ventana_modal, nueva_seccion):
         seleccion = self.tree.selection()
@@ -843,8 +844,11 @@ class TabDetalle(ttk.Frame):
             # # cursor.execute(cadena, (nueva_seccion_id, detalle_id))
             # # conn.commit()
             # conn.close()
+            selected = self.combo_secciones.get()
+            id_seccion = self.ids_seccion_item.get(selected, 0)
 
-            messagebox.showinfo("Actualizar Sección", f"Funcionalidad de cambiar sección no implementada en esta versión.{detalle_id}")
+            messagebox.showinfo("Información", f"Funcionalidad de cambiar sección no implementada en esta versión.\nSección seleccionada: {selected}\nID: {id_seccion}")
+            
             ventana_modal.destroy()
             self.buscar()  # Refrescar lista
 
